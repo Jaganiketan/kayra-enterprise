@@ -12,129 +12,208 @@ body{
 margin:0;
 font-family:Arial,sans-serif;
 background:#f3f5f4;
-color:#222
+color:#222;
 }
 
 .header{
 background:#064d35;
-color:#fff;
+color:white;
 padding:20px;
-text-align:center
+text-align:center;
 }
 
 .header h1{
 margin:0;
-font-size:24px
+font-size:25px;
 }
 
 .header p{
 margin:6px 0 0;
-font-size:13px
+font-size:13px;
 }
 
 .container{
-max-width:650px;
-margin:20px auto;
-padding:15px
+max-width:700px;
+margin:auto;
+padding:15px;
 }
 
 .card{
-background:#fff;
+background:white;
 border-radius:16px;
 padding:20px;
 margin-bottom:20px;
-box-shadow:0 4px 18px rgba(0,0,0,.08)
+box-shadow:0 4px 18px rgba(0,0,0,.08);
 }
 
 h2{
 color:#064d35;
-margin-top:0
+margin-top:0;
 }
 
 label{
 display:block;
+font-weight:bold;
+font-size:14px;
 margin:14px 0 6px;
-font-weight:bold
 }
 
-input,select{
+input,select,textarea{
 width:100%;
 padding:13px;
 border:1px solid #ccc;
 border-radius:10px;
-font-size:15px
+font-size:15px;
+font-family:inherit;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
 }
 
 button{
 width:100%;
 padding:13px;
-margin-top:15px;
+margin-top:14px;
 border:0;
 border-radius:10px;
 background:#08a65c;
 color:white;
 font-size:16px;
-font-weight:bold
-}
-
-button:active{
-transform:scale(.98)
+font-weight:bold;
 }
 
 button:disabled{
-opacity:.6
+opacity:.6;
 }
 
 .logout,.delete{
-background:#d93025
+background:#d93025;
 }
 
 .edit{
-background:#087f5b
+background:#087f5b;
 }
 
 .stock{
-background:#555
+background:#555;
+}
+
+.secondary{
+background:#1769aa;
 }
 
 .message{
+display:none;
 margin-top:15px;
 padding:12px;
 border-radius:10px;
 text-align:center;
 font-weight:bold;
-display:none
 }
 
 .success{
 display:block;
 background:#d9f8e8;
-color:#08733f
+color:#08733f;
 }
 
 .error{
 display:block;
 background:#ffe1e1;
-color:#a40000
+color:#a40000;
 }
 
 .user{
 background:#e9f8f0;
 padding:12px;
 border-radius:10px;
-margin-bottom:18px
+margin-bottom:18px;
+font-size:14px;
+}
+
+#adminPanel{
+display:none;
+}
+
+.dashboard{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.stat{
+background:#f1faf6;
+border-radius:12px;
+padding:15px;
+text-align:center;
+}
+
+.stat-number{
+font-size:25px;
+font-weight:bold;
+color:#064d35;
+}
+
+.stat-title{
+font-size:12px;
+margin-top:5px;
+}
+
+.photo-box{
+border:2px dashed #08a65c;
+border-radius:14px;
+padding:15px;
+text-align:center;
+background:#f5fff9;
+}
+
+.photo-box input{
+border:0;
+background:transparent;
+}
+
+.preview{
+display:none;
+width:100%;
+max-height:250px;
+object-fit:contain;
+margin-top:12px;
+border-radius:12px;
+}
+
+.upload-status{
+margin-top:8px;
+font-size:13px;
+font-weight:bold;
+}
+
+.check-row{
+display:flex;
+gap:10px;
+align-items:center;
+margin-top:15px;
+}
+
+.check-row input{
+width:20px;
+height:20px;
+}
+
+.check-row label{
+margin:0;
+}
+
+.search-box{
+margin-bottom:15px;
 }
 
 .product{
 border:1px solid #ddd;
 border-radius:14px;
 padding:15px;
-margin-top:15px
-}
-
-.product h3{
-margin:0;
-color:#064d35
+margin-top:15px;
 }
 
 .product-image{
@@ -142,24 +221,56 @@ width:100%;
 height:200px;
 object-fit:cover;
 border-radius:12px;
-margin-bottom:12px;
-background:#f1f1f1
+background:#f1f1f1;
+margin-bottom:10px;
+}
+
+.product h3{
+margin:5px 0;
+color:#064d35;
+}
+
+.product-meta{
+font-size:13px;
+line-height:1.6;
 }
 
 .price{
 font-size:20px;
 font-weight:bold;
 color:#08a65c;
-margin:8px 0
+margin:8px 0;
+}
+
+.old-price{
+text-decoration:line-through;
+color:#888;
+font-size:14px;
+margin-left:6px;
+}
+
+.badges{
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+margin:8px 0;
+}
+
+.badge{
+padding:5px 8px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+background:#eee;
 }
 
 .actions{
 display:flex;
-gap:8px
+gap:8px;
 }
 
 .actions button{
-flex:1
+flex:1;
 }
 
 .back{
@@ -168,49 +279,19 @@ text-align:center;
 color:#064d35;
 font-weight:bold;
 text-decoration:none;
-margin:20px
+margin:20px;
 }
 
-#adminPanel{
-display:none
-}
-
-.photo-box{
-border:2px dashed #08a65c;
-border-radius:14px;
-padding:20px;
-text-align:center;
-background:#f3fff9;
-margin-top:8px
-}
-
-.photo-box input{
-border:0;
-padding:5px;
-background:transparent
-}
-
-.preview{
-display:none;
-width:100%;
-max-height:250px;
-object-fit:contain;
-margin-top:15px;
-border-radius:12px
-}
-
-.upload-status{
-font-size:14px;
-margin-top:10px;
-color:#08733f;
-font-weight:bold
-}
-
-.small-note{
+.small{
 font-size:12px;
 color:#666;
-margin-top:8px;
-line-height:1.5
+line-height:1.5;
+}
+
+.empty{
+text-align:center;
+padding:20px;
+color:#777;
 }
 </style>
 </head>
@@ -219,7 +300,7 @@ line-height:1.5
 
 <header class="header">
 <h1>Kayra Enterprise</h1>
-<p>Admin Product Panel</p>
+<p>Admin Product Management</p>
 </header>
 
 <div class="container">
@@ -255,9 +336,11 @@ placeholder="Enter password"
 </div>
 
 
-<!-- ADMIN -->
+<!-- ADMIN PANEL -->
 
 <div id="adminPanel">
+
+<!-- USER -->
 
 <div class="card">
 
@@ -266,18 +349,86 @@ placeholder="Enter password"
 <strong id="adminEmail"></strong>
 </div>
 
+<button
+class="logout"
+id="logoutBtn">
+🚪 Logout
+</button>
+
+</div>
+
+
+<!-- DASHBOARD -->
+
+<div class="card">
+
+<h2>📊 Dashboard</h2>
+
+<div class="dashboard">
+
+<div class="stat">
+<div
+class="stat-number"
+id="totalProducts">
+0
+</div>
+<div class="stat-title">
+Total Products
+</div>
+</div>
+
+<div class="stat">
+<div
+class="stat-number"
+id="inStockProducts">
+0
+</div>
+<div class="stat-title">
+In Stock
+</div>
+</div>
+
+<div class="stat">
+<div
+class="stat-number"
+id="outStockProducts">
+0
+</div>
+<div class="stat-title">
+Out of Stock
+</div>
+</div>
+
+<div class="stat">
+<div
+class="stat-number"
+id="featuredProducts">
+0
+</div>
+<div class="stat-title">
+Featured
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ADD PRODUCT -->
+
+<div class="card">
+
 <h2>➕ Add New Product</h2>
 
-
-<label>Product Name</label>
+<label>Product Name *</label>
 
 <input
 id="productName"
 placeholder="Example: Coconut Broom"
 >
 
-
-<label>Category</label>
+<label>Category *</label>
 
 <select id="productCategory">
 
@@ -296,27 +447,100 @@ Other
 </select>
 
 
-<label>Price (₹)</label>
+<label>Product Code / SKU</label>
+
+<input
+id="productSKU"
+placeholder="Example: KB-001"
+>
+
+
+<label>Description</label>
+
+<textarea
+id="productDescription"
+placeholder="Enter product details..."
+></textarea>
+
+
+<label>Regular Price (₹) *</label>
 
 <input
 type="number"
 id="productPrice"
 min="0"
+placeholder="150"
+>
+
+
+<label>Offer Price (₹)</label>
+
+<input
+type="number"
+id="productOfferPrice"
+min="0"
 placeholder="120"
 >
 
 
-<!-- PHOTO UPLOAD -->
+<label>Stock Quantity</label>
+
+<input
+type="number"
+id="productStockQty"
+min="0"
+value="1"
+>
+
+
+<div class="check-row">
+
+<input
+type="checkbox"
+id="productStock"
+checked
+>
+
+<label for="productStock">
+🟢 Product In Stock
+</label>
+
+</div>
+
+
+<div class="check-row">
+
+<input
+type="checkbox"
+id="productFeatured"
+>
+
+<label for="productFeatured">
+⭐ Featured Product
+</label>
+
+</div>
+
+
+<div class="check-row">
+
+<input
+type="checkbox"
+id="productIsNew"
+>
+
+<label for="productIsNew">
+🆕 New Product
+</label>
+
+</div>
+
 
 <label>
-📷 Product Photo
+📷 Product Photo *
 </label>
 
 <div class="photo-box">
-
-<strong>
-Select photo from your mobile Gallery
-</strong>
 
 <input
 type="file"
@@ -334,52 +558,41 @@ id="uploadStatus"
 class="upload-status">
 </div>
 
-<div class="small-note">
-Photo automatically Cloudinary पर upload होगी।
-फिर उसका URL Firebase में save होगा।
-</div>
+<p class="small">
+Mobile Gallery से photo चुनें।<br>
+Photo Cloudinary पर upload होगी।
+</p>
 
 </div>
-
-
-<label>
-
-<input
-type="checkbox"
-id="productStock"
-checked
-style="width:20px"
->
-
-Product In Stock
-
-</label>
 
 
 <button id="addProductBtn">
 ➕ Add Product
 </button>
 
-<div id="message" class="message"></div>
-
-
-<button
-class="logout"
-id="logoutBtn"
->
-🚪 Logout
-</button>
+<div
+id="message"
+class="message">
+</div>
 
 </div>
 
 
-<!-- PRODUCT MANAGEMENT -->
+<!-- MANAGE PRODUCTS -->
 
 <div class="card">
 
-<h2>
-📦 Manage Products
-</h2>
+<h2>📦 Manage Products</h2>
+
+<div class="search-box">
+
+<input
+type="search"
+id="adminSearch"
+placeholder="🔍 Search products..."
+>
+
+</div>
 
 <div id="productsList">
 Loading products...
@@ -392,8 +605,7 @@ Loading products...
 
 <a
 class="back"
-href="index.html"
->
+href="index.html">
 ← Back to Website
 </a>
 
@@ -402,9 +614,9 @@ href="index.html"
 
 <script type="module">
 
-/* ============================
+/* =========================================
    FIREBASE
-============================ */
+========================================= */
 
 import {
 initializeApp
@@ -437,9 +649,9 @@ from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
-/* ============================
+/* =========================================
    FIREBASE CONFIG
-============================ */
+========================================= */
 
 const firebaseConfig={
 
@@ -474,28 +686,35 @@ const auth=
 getAuth(app);
 
 
-/* ============================
+/* =========================================
    ADMIN UID
-============================ */
+========================================= */
 
 const ADMIN_UID=
 "nXHIW6ntWCZilxyxoupg9kgATsy2";
 
 
-/* ============================
+/* =========================================
    CLOUDINARY
-============================ */
+========================================= */
 
-const CLOUDINARY_CLOUD_NAME=
+const CLOUD_NAME=
 "dzasxahe9";
 
-const CLOUDINARY_UPLOAD_PRESET=
+const UPLOAD_PRESET=
 "shopupload";
 
 
-/* ============================
+/* =========================================
+   VARIABLES
+========================================= */
+
+let allProducts=[];
+
+
+/* =========================================
    ELEMENTS
-============================ */
+========================================= */
 
 const loginPanel=
 document.getElementById("loginPanel");
@@ -518,6 +737,8 @@ document.getElementById("loginMessage");
 const adminEmail=
 document.getElementById("adminEmail");
 
+const logoutBtn=
+document.getElementById("logoutBtn");
 
 const productName=
 document.getElementById("productName");
@@ -525,8 +746,29 @@ document.getElementById("productName");
 const productCategory=
 document.getElementById("productCategory");
 
+const productSKU=
+document.getElementById("productSKU");
+
+const productDescription=
+document.getElementById("productDescription");
+
 const productPrice=
 document.getElementById("productPrice");
+
+const productOfferPrice=
+document.getElementById("productOfferPrice");
+
+const productStockQty=
+document.getElementById("productStockQty");
+
+const productStock=
+document.getElementById("productStock");
+
+const productFeatured=
+document.getElementById("productFeatured");
+
+const productIsNew=
+document.getElementById("productIsNew");
 
 const productPhoto=
 document.getElementById("productPhoto");
@@ -537,9 +779,6 @@ document.getElementById("photoPreview");
 const uploadStatus=
 document.getElementById("uploadStatus");
 
-const productStock=
-document.getElementById("productStock");
-
 const addProductBtn=
 document.getElementById("addProductBtn");
 
@@ -549,86 +788,17 @@ document.getElementById("message");
 const productsList=
 document.getElementById("productsList");
 
-
-/* ============================
-   PHOTO PREVIEW
-============================ */
-
-productPhoto.addEventListener(
-"change",
-function(){
-
-const file=
-productPhoto.files[0];
-
-if(!file){
-
-photoPreview.style.display="none";
-uploadStatus.textContent="";
-return;
-
-}
+const adminSearch=
+document.getElementById("adminSearch");
 
 
-/* File type */
-
-if(!file.type.startsWith("image/")){
-
-uploadStatus.textContent=
-"❌ केवल image select करें.";
-
-productPhoto.value="";
-
-return;
-
-}
-
-
-/* File size */
-
-if(file.size>10*1024*1024){
-
-uploadStatus.textContent=
-"❌ Photo 10MB से छोटी होनी चाहिए.";
-
-productPhoto.value="";
-
-return;
-
-}
-
-
-const reader=
-new FileReader();
-
-
-reader.onload=function(e){
-
-photoPreview.src=
-e.target.result;
-
-photoPreview.style.display=
-"block";
-
-uploadStatus.textContent=
-"✅ Photo selected. अब Add Product दबाएँ.";
-
-};
-
-
-reader.readAsDataURL(file);
-
-});
-
-
-/* ============================
-   MESSAGE
-============================ */
+/* =========================================
+   MESSAGES
+========================================= */
 
 function showLogin(text,type){
 
-loginMessage.textContent=
-text;
+loginMessage.textContent=text;
 
 loginMessage.className=
 "message "+type;
@@ -638,8 +808,7 @@ loginMessage.className=
 
 function showMessage(text,type){
 
-message.textContent=
-text;
+message.textContent=text;
 
 message.className=
 "message "+type;
@@ -647,9 +816,9 @@ message.className=
 }
 
 
-/* ============================
+/* =========================================
    LOGIN
-============================ */
+========================================= */
 
 loginBtn.onclick=
 async()=>{
@@ -707,15 +876,26 @@ loginBtn.textContent=
 };
 
 
-/* ============================
-   AUTH
-============================ */
+/* =========================================
+   AUTH CHECK
+========================================= */
 
 onAuthStateChanged(
 auth,
 async(user)=>{
 
-if(user){
+if(!user){
+
+loginPanel.style.display=
+"block";
+
+adminPanel.style.display=
+"none";
+
+return;
+
+}
+
 
 if(user.uid!==ADMIN_UID){
 
@@ -742,41 +922,101 @@ user.email;
 
 loadProducts();
 
-
-}else{
-
-loginPanel.style.display=
-"block";
-
-adminPanel.style.display=
-"none";
-
-}
-
 });
 
 
-/* ============================
+/* =========================================
    LOGOUT
-============================ */
+========================================= */
 
-document.getElementById(
-"logoutBtn"
-).onclick=()=>{
+logoutBtn.onclick=
+()=>signOut(auth);
 
-signOut(auth);
+
+/* =========================================
+   PHOTO PREVIEW
+========================================= */
+
+productPhoto.addEventListener(
+"change",
+()=>{
+
+const file=
+productPhoto.files[0];
+
+if(!file){
+
+photoPreview.style.display=
+"none";
+
+uploadStatus.textContent="";
+
+return;
+
+}
+
+
+if(!file.type.startsWith("image/")){
+
+showMessage(
+"❌ केवल image file चुनें.",
+"error"
+);
+
+productPhoto.value="";
+
+return;
+
+}
+
+
+if(file.size>
+10*1024*1024){
+
+showMessage(
+"❌ Photo 10MB से छोटी रखें.",
+"error"
+);
+
+productPhoto.value="";
+
+return;
+
+}
+
+
+const reader=
+new FileReader();
+
+
+reader.onload=
+event=>{
+
+photoPreview.src=
+event.target.result;
+
+photoPreview.style.display=
+"block";
+
+uploadStatus.textContent=
+"✅ Photo selected.";
 
 };
 
 
-/* ============================
+reader.readAsDataURL(file);
+
+});
+
+
+/* =========================================
    CLOUDINARY UPLOAD
-============================ */
+========================================= */
 
 async function uploadToCloudinary(file){
 
 const url=
-`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
 
 const formData=
@@ -788,10 +1028,9 @@ formData.append(
 file
 );
 
-
 formData.append(
 "upload_preset",
-CLOUDINARY_UPLOAD_PRESET
+UPLOAD_PRESET
 );
 
 
@@ -823,9 +1062,9 @@ return data.secure_url;
 }
 
 
-/* ============================
+/* =========================================
    ADD PRODUCT
-============================ */
+========================================= */
 
 addProductBtn.onclick=
 async()=>{
@@ -836,14 +1075,32 @@ productName.value.trim();
 const category=
 productCategory.value;
 
+const sku=
+productSKU.value.trim();
+
+const description=
+productDescription.value.trim();
+
 const price=
 Number(productPrice.value);
 
-const file=
-productPhoto.files[0];
+const offerPrice=
+Number(productOfferPrice.value);
+
+const stockQty=
+Number(productStockQty.value);
 
 const stock=
 productStock.checked;
+
+const featured=
+productFeatured.checked;
+
+const isNew=
+productIsNew.checked;
+
+const file=
+productPhoto.files[0];
 
 
 if(!name){
@@ -858,10 +1115,37 @@ return;
 }
 
 
-if(isNaN(price)||price<0){
+if(!price||price<0){
 
 showMessage(
-"सही price डालें.",
+"Regular price सही डालें.",
+"error"
+);
+
+return;
+
+}
+
+
+if(
+offerPrice &&
+offerPrice>price
+){
+
+showMessage(
+"Offer price regular price से ज्यादा नहीं हो सकता.",
+"error"
+);
+
+return;
+
+}
+
+
+if(stockQty<0){
+
+showMessage(
+"Stock quantity सही डालें.",
 "error"
 );
 
@@ -887,24 +1171,20 @@ addProductBtn.disabled=true;
 addProductBtn.textContent=
 "Uploading Photo...";
 
-uploadStatus.textContent=
-"⏳ Photo Cloudinary पर upload हो रही है...";
-
 
 try{
 
+uploadStatus.textContent=
+"⏳ Uploading photo...";
 
-/* UPLOAD PHOTO */
 
-const imageUrl=
+const image=
 await uploadToCloudinary(file);
 
 
 uploadStatus.textContent=
-"✅ Photo uploaded successfully!";
+"✅ Photo uploaded";
 
-
-/* SAVE FIREBASE */
 
 addProductBtn.textContent=
 "Saving Product...";
@@ -918,13 +1198,32 @@ name:name,
 
 category:category,
 
+sku:sku,
+
+description:description,
+
 price:price,
 
-image:imageUrl,
+offerPrice:
+offerPrice||0,
+
+stockQty:
+stockQty,
 
 stock:stock,
 
+featured:featured,
+
+isNew:isNew,
+
+image:image,
+
+images:[image],
+
 createdAt:
+serverTimestamp(),
+
+updatedAt:
 serverTimestamp()
 
 }
@@ -937,23 +1236,7 @@ showMessage(
 );
 
 
-/* CLEAR */
-
-productName.value="";
-
-productPrice.value="";
-
-productPhoto.value="";
-
-photoPreview.src="";
-
-photoPreview.style.display=
-"none";
-
-uploadStatus.textContent="";
-
-productStock.checked=true;
-
+clearForm();
 
 loadProducts();
 
@@ -963,7 +1246,7 @@ loadProducts();
 console.error(error);
 
 showMessage(
-"❌ Photo या Product save नहीं हुआ.",
+"❌ Product save नहीं हुआ.",
 "error"
 );
 
@@ -981,9 +1264,45 @@ addProductBtn.textContent=
 };
 
 
-/* ============================
+/* =========================================
+   CLEAR FORM
+========================================= */
+
+function clearForm(){
+
+productName.value="";
+
+productSKU.value="";
+
+productDescription.value="";
+
+productPrice.value="";
+
+productOfferPrice.value="";
+
+productStockQty.value="1";
+
+productStock.checked=true;
+
+productFeatured.checked=false;
+
+productIsNew.checked=false;
+
+productPhoto.value="";
+
+photoPreview.src="";
+
+photoPreview.style.display=
+"none";
+
+uploadStatus.textContent="";
+
+}
+
+
+/* =========================================
    LOAD PRODUCTS
-============================ */
+========================================= */
 
 async function loadProducts(){
 
@@ -999,56 +1318,198 @@ collection(db,"products")
 );
 
 
+allProducts=[];
+
+
+snapshot.forEach(item=>{
+
+allProducts.push({
+
+id:item.id,
+
+...item.data()
+
+});
+
+});
+
+
+updateDashboard();
+
+renderProducts();
+
+
+}catch(error){
+
+console.error(error);
+
+productsList.innerHTML=
+"<div class='empty'>❌ Products load नहीं हुए.</div>";
+
+}
+
+}
+
+
+/* =========================================
+   DASHBOARD
+========================================= */
+
+function updateDashboard(){
+
+const total=
+allProducts.length;
+
+const inStock=
+allProducts.filter(
+p=>p.stock===true
+).length;
+
+const outStock=
+total-inStock;
+
+const featured=
+allProducts.filter(
+p=>p.featured===true
+).length;
+
+
+document.getElementById(
+"totalProducts"
+).textContent=
+total;
+
+
+document.getElementById(
+"inStockProducts"
+).textContent=
+inStock;
+
+
+document.getElementById(
+"outStockProducts"
+).textContent=
+outStock;
+
+
+document.getElementById(
+"featuredProducts"
+).textContent=
+featured;
+
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+adminSearch.addEventListener(
+"input",
+renderProducts
+);
+
+
+/* =========================================
+   RENDER PRODUCTS
+========================================= */
+
+function renderProducts(){
+
+const search=
+adminSearch.value
+.trim()
+.toLowerCase();
+
+
+const filtered=
+allProducts.filter(
+product=>{
+
+const name=
+String(
+product.name||
+product.Name||
+""
+).toLowerCase();
+
+
+const sku=
+String(
+product.sku||
+""
+).toLowerCase();
+
+
+return(
+name.includes(search)||
+sku.includes(search)
+);
+
+});
+
+
 productsList.innerHTML="";
 
 
-if(snapshot.empty){
+if(!filtered.length){
 
 productsList.innerHTML=
-"<p>No products found.</p>";
+"<div class='empty'>No products found.</div>";
 
 return;
 
 }
 
 
-snapshot.forEach(item=>{
-
-const data=
-item.data();
-
-
-const name=
-data.name||
-data.Name||
-"Product";
-
-
-const category=
-data.category||
-"Other";
-
-
-const price=
-data.price||
-0;
-
-
-const image=
-data.image||
-"";
-
-
-const stock=
-data.stock===true;
-
+filtered.forEach(
+product=>{
 
 const div=
 document.createElement("div");
 
-
 div.className=
 "product";
+
+
+const name=
+product.name||
+product.Name||
+"Product";
+
+
+const category=
+product.category||
+"Other";
+
+
+const price=
+Number(product.price||0);
+
+
+const offerPrice=
+Number(product.offerPrice||0);
+
+
+const image=
+product.image||
+"";
+
+
+const stock=
+product.stock===true;
+
+
+const qty=
+Number(product.stockQty||0);
+
+
+const featured=
+product.featured===true;
+
+
+const isNew=
+product.isNew===true;
 
 
 div.innerHTML=`
@@ -1071,16 +1532,38 @@ alt="${escapeHTML(name)}"
 ${escapeHTML(name)}
 </h3>
 
-<p>
-Category:
-${escapeHTML(category)}
-</p>
+<div class="badges">
 
-<div class="price">
-₹${price}
+<span class="badge">
+${escapeHTML(category)}
+</span>
+
+${
+featured
+?
+`<span class="badge">⭐ Featured</span>`
+:
+""
+}
+
+${
+isNew
+?
+`<span class="badge">🆕 New</span>`
+:
+""
+}
+
 </div>
 
-<p>
+<div class="product-meta">
+
+SKU:
+${escapeHTML(product.sku||"Not set")}
+
+<br>
+
+Stock:
 ${
 stock
 ?
@@ -1088,7 +1571,31 @@ stock
 :
 "🔴 Out of Stock"
 }
-</p>
+
+<br>
+
+Quantity:
+${qty}
+
+</div>
+
+<div class="price">
+
+${
+offerPrice>0 &&
+offerPrice<price
+?
+`
+₹${offerPrice}
+<span class="old-price">
+₹${price}
+</span>
+`
+:
+`₹${price}`
+}
+
+</div>
 
 <div class="actions">
 
@@ -1117,33 +1624,26 @@ stock
 `;
 
 
-const editBtn=
-div.querySelector(".edit");
-
-const deleteBtn=
-div.querySelector(".delete");
-
-const stockBtn=
-div.querySelector(".stock");
-
-
-editBtn.onclick=
+div.querySelector(".edit")
+.onclick=
 ()=>editProduct(
-item.id,
-data
+product.id,
+product
 );
 
 
-deleteBtn.onclick=
+div.querySelector(".delete")
+.onclick=
 ()=>deleteProduct(
-item.id,
+product.id,
 name
 );
 
 
-stockBtn.onclick=
+div.querySelector(".stock")
+.onclick=
 ()=>toggleStock(
-item.id,
+product.id,
 stock
 );
 
@@ -1152,22 +1652,12 @@ productsList.appendChild(div);
 
 });
 
-
-}catch(error){
-
-console.error(error);
-
-productsList.innerHTML=
-"<p>❌ Products load नहीं हुए.</p>";
-
-}
-
 }
 
 
-/* ============================
-   EDIT
-============================ */
+/* =========================================
+   EDIT PRODUCT
+========================================= */
 
 async function editProduct(
 id,
@@ -1181,13 +1671,38 @@ data.Name||
 
 
 const oldPrice=
-data.price||
-0;
+Number(data.price||0);
+
+
+const oldOffer=
+Number(data.offerPrice||0);
 
 
 const oldCategory=
 data.category||
 "Other";
+
+
+const oldSKU=
+data.sku||
+"";
+
+
+const oldDescription=
+data.description||
+"";
+
+
+const oldQty=
+Number(data.stockQty||0);
+
+
+const oldFeatured=
+data.featured===true;
+
+
+const oldNew=
+data.isNew===true;
 
 
 const newName=
@@ -1196,18 +1711,25 @@ prompt(
 oldName
 );
 
-
 if(newName===null)return;
 
 
 const newPrice=
 prompt(
-"Price:",
+"Regular Price:",
 oldPrice
 );
 
-
 if(newPrice===null)return;
+
+
+const newOffer=
+prompt(
+"Offer Price (0 = none):",
+oldOffer
+);
+
+if(newOffer===null)return;
 
 
 const newCategory=
@@ -1216,170 +1738,42 @@ prompt(
 oldCategory
 );
 
-
 if(newCategory===null)return;
 
 
-try{
-
-await updateDoc(
-doc(db,"products",id),
-{
-
-name:
-newName.trim(),
-
-price:
-Number(newPrice),
-
-category:
-newCategory.trim()
-
-}
+const newSKU=
+prompt(
+"SKU:",
+oldSKU
 );
 
+if(newSKU===null)return;
 
-alert(
-"✅ Product updated successfully!"
+
+const newDescription=
+prompt(
+"Description:",
+oldDescription
 );
 
+if(newDescription===null)return;
 
-loadProducts();
 
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"❌ Product update नहीं हुआ."
+const newQty=
+prompt(
+"Stock Quantity:",
+oldQty
 );
 
-}
-
-}
+if(newQty===null)return;
 
 
-/* ============================
-   DELETE
-============================ */
-
-async function deleteProduct(
-id,
-name
-){
-
-const confirmDelete=
+const newFeatured=
 confirm(
-`क्या आप "${name}" को delete करना चाहते हैं?`
+"Featured Product?\nOK = Yes\nCancel = No"
 );
 
 
-if(!confirmDelete)return;
-
-
-try{
-
-await deleteDoc(
-doc(db,"products",id)
-);
-
-
-alert(
-"✅ Product deleted!"
-);
-
-
-loadProducts();
-
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"❌ Product delete नहीं हुआ."
-);
-
-}
-
-}
-
-
-/* ============================
-   STOCK
-============================ */
-
-async function toggleStock(
-id,
-currentStock
-){
-
-try{
-
-await updateDoc(
-doc(db,"products",id),
-{
-
-stock:
-!currentStock
-
-}
-);
-
-
-loadProducts();
-
-
-}catch(error){
-
-console.error(error);
-
-alert(
-"❌ Stock update नहीं हुआ."
-);
-
-}
-
-}
-
-
-/* ============================
-   SECURITY
-============================ */
-
-function escapeHTML(text){
-
-return String(text)
-
-.replaceAll(
-"&",
-"&amp;"
-)
-
-.replaceAll(
-"<",
-"&lt;"
-)
-
-.replaceAll(
-">",
-"&gt;"
-)
-
-.replaceAll(
-'"',
-"&quot;"
-)
-
-.replaceAll(
-"'",
-"&#039;"
-);
-
-}
-
-</script>
-
-</body>
- </html>
+const newIsNew=
+confirm(
+"New Product?\nOK = Yes\nCancel = No
