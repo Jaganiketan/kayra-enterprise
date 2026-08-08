@@ -157,7 +157,7 @@ function renderProducts() {
             // Firebase field is "Name"
             const productName =
                 String(
-                    product.Name || ""
+                    product.name || ""
                 ).toLowerCase();
 
 
@@ -231,7 +231,7 @@ function createProductCard(product) {
 
     // Firebase field: Name
     const name =
-        product.Name || "Product";
+        product.name || "Product";
 
 
     // Firebase field: price
