@@ -1,153 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Kayra Enterprise - Admin</title>
+<title>Kayra Enterprise - Admin</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
+*{box-sizing:border-box}
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f3f5f4;
-            color: #222;
-        }
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f3f5f4;
+    color:#222;
+}
 
-        .header {
-            background: #064d35;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
+.header{
+    background:#064d35;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
 
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
+.header h1{
+    margin:0;
+    font-size:24px;
+}
 
-        .header p {
-            margin: 6px 0 0;
-            font-size: 13px;
-        }
+.header p{
+    margin:6px 0 0;
+    font-size:13px;
+}
 
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 15px;
-        }
+.container{
+    max-width:600px;
+    margin:20px auto;
+    padding:15px;
+}
 
-        .card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-        }
+.card{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
 
-        .card h2 {
-            margin-top: 0;
-            color: #064d35;
-        }
+.card h2{
+    margin-top:0;
+    color:#064d35;
+}
 
-        label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 6px;
-            font-weight: bold;
-            font-size: 14px;
-        }
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:6px;
+    font-weight:bold;
+    font-size:14px;
+}
 
-        input,
-        select {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-        }
+input,select{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-size:15px;
+    outline:none;
+}
 
-        input:focus,
-        select:focus {
-            border-color: #0aa765;
-        }
+button{
+    width:100%;
+    margin-top:20px;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#08a65c;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+}
 
-        .stock-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 18px;
-        }
+.logout{
+    background:#d93025;
+}
 
-        .stock-box input {
-            width: 20px;
-            height: 20px;
-        }
+.stock-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:18px;
+}
 
-        .stock-box label {
-            margin: 0;
-        }
+.stock-box input{
+    width:20px;
+    height:20px;
+}
 
-        button {
-            width: 100%;
-            margin-top: 22px;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            background: #08a65c;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+.stock-box label{
+    margin:0;
+}
 
-        button:active {
-            transform: scale(0.98);
-        }
+.message{
+    margin-top:15px;
+    padding:12px;
+    border-radius:10px;
+    display:none;
+    text-align:center;
+    font-weight:bold;
+}
 
-        .message {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 10px;
-            display: none;
-            text-align: center;
-            font-weight: bold;
-        }
+.success{
+    display:block;
+    background:#d9f8e8;
+    color:#08733f;
+}
 
-        .success {
-            display: block;
-            background: #d9f8e8;
-            color: #08733f;
-        }
+.error{
+    display:block;
+    background:#ffe1e1;
+    color:#a40000;
+}
 
-        .error {
-            display: block;
-            background: #ffe1e1;
-            color: #a40000;
-        }
+#adminPanel{
+    display:none;
+}
 
-        .back {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #064d35;
-            text-decoration: none;
-            font-weight: bold;
-        }
+.back{
+    display:block;
+    text-align:center;
+    margin-top:20px;
+    color:#064d35;
+    text-decoration:none;
+    font-weight:bold;
+}
 
-        .note {
-            background: #fff8dc;
-            padding: 12px;
-            border-radius: 10px;
-            margin-top: 15px;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-    </style>
+.user-box{
+    background:#e9f8f0;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:20px;
+    font-size:14px;
+}
+</style>
 </head>
 
 <body>
@@ -159,72 +153,118 @@
 
 <div class="container">
 
-    <div class="card">
+<!-- LOGIN -->
 
-        <h2>➕ Add New Product</h2>
+<div class="card" id="loginPanel">
 
-        <label>Product Name</label>
+    <h2>🔐 Admin Login</h2>
+
+    <label>Email</label>
+
+    <input
+        type="email"
+        id="loginEmail"
+        value="jaganiketan2@gmail.com"
+        placeholder="Admin Email"
+    >
+
+    <label>Password</label>
+
+    <input
+        type="password"
+        id="loginPassword"
+        placeholder="Enter password"
+    >
+
+    <button id="loginBtn">
+        🔐 Login
+    </button>
+
+    <div id="loginMessage" class="message"></div>
+
+</div>
+
+
+<!-- ADMIN PANEL -->
+
+<div class="card" id="adminPanel">
+
+    <div class="user-box">
+        ✅ Logged in as:
+        <strong id="adminEmail"></strong>
+    </div>
+
+    <h2>➕ Add New Product</h2>
+
+    <label>Product Name</label>
+
+    <input
+        type="text"
+        id="productName"
+        placeholder="Example: Coconut Broom"
+    >
+
+    <label>Category</label>
+
+    <select id="productCategory">
+
+        <option value="Broom">Broom</option>
+
+        <option value="Cleaning">Cleaning</option>
+
+        <option value="Other">Other</option>
+
+    </select>
+
+    <label>Price (₹)</label>
+
+    <input
+        type="number"
+        id="productPrice"
+        placeholder="120"
+        min="0"
+    >
+
+    <label>Image URL</label>
+
+    <input
+        type="url"
+        id="productImage"
+        placeholder="https://example.com/image.jpg"
+    >
+
+    <div class="stock-box">
+
         <input
-            type="text"
-            id="productName"
-            placeholder="Example: Coconut Broom"
+            type="checkbox"
+            id="productStock"
+            checked
         >
 
-        <label>Category</label>
-        <select id="productCategory">
-            <option value="Broom">Broom</option>
-            <option value="Cleaning">Cleaning</option>
-            <option value="Other">Other</option>
-        </select>
-
-        <label>Price (₹)</label>
-        <input
-            type="number"
-            id="productPrice"
-            placeholder="120"
-            min="0"
-        >
-
-        <label>Image URL</label>
-        <input
-            type="url"
-            id="productImage"
-            placeholder="https://example.com/image.jpg"
-        >
-
-        <div class="stock-box">
-            <input
-                type="checkbox"
-                id="productStock"
-                checked
-            >
-
-            <label for="productStock">
-                Product In Stock
-            </label>
-        </div>
-
-        <button id="addProductBtn">
-            ➕ Add Product
-        </button>
-
-        <div id="message" class="message"></div>
-
-        <div class="note">
-            💡 अभी image के लिए Image URL डालें।
-            बाद में हम ऐसा system बनाएँगे जिसमें आप
-            सीधे अपने mobile की Gallery से image upload
-            कर सकेंगे।
-        </div>
+        <label for="productStock">
+            Product In Stock
+        </label>
 
     </div>
 
-    <a
-        href="index.html"
-        class="back"
+    <button id="addProductBtn">
+        ➕ Add Product
+    </button>
+
+    <button
+        id="logoutBtn"
+        class="logout"
     >
-        ← Back to Website
-    </a>
+        🚪 Logout
+    </button>
+
+    <div id="message" class="message"></div>
+
+</div>
+
+<a href="index.html" class="back">
+    ← Back to Website
+</a>
 
 </div>
 
@@ -241,6 +281,13 @@ import {
     addDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
 /* ==============================
@@ -279,10 +326,45 @@ const app =
 const db =
     getFirestore(app);
 
+const auth =
+    getAuth(app);
+
+
+/* ==============================
+   ADMIN UID
+============================== */
+
+const ADMIN_UID =
+    "nXHIW6ntWCZilxyxoupg9kgATsy2";
+
 
 /* ==============================
    ELEMENTS
 ============================== */
+
+const loginPanel =
+    document.getElementById("loginPanel");
+
+const adminPanel =
+    document.getElementById("adminPanel");
+
+const loginEmail =
+    document.getElementById("loginEmail");
+
+const loginPassword =
+    document.getElementById("loginPassword");
+
+const loginBtn =
+    document.getElementById("loginBtn");
+
+const loginMessage =
+    document.getElementById("loginMessage");
+
+const adminEmail =
+    document.getElementById("adminEmail");
+
+const logoutBtn =
+    document.getElementById("logoutBtn");
 
 const productName =
     document.getElementById("productName");
@@ -310,14 +392,151 @@ const message =
    MESSAGE
 ============================== */
 
-function showMessage(text, type) {
+function showLoginMessage(text,type){
+
+    loginMessage.textContent = text;
+
+    loginMessage.className =
+        "message " + type;
+}
+
+
+function showMessage(text,type){
 
     message.textContent = text;
 
     message.className =
         "message " + type;
-
 }
+
+
+/* ==============================
+   LOGIN
+============================== */
+
+loginBtn.addEventListener(
+    "click",
+    async () => {
+
+        const email =
+            loginEmail.value.trim();
+
+        const password =
+            loginPassword.value;
+
+
+        if(!email || !password){
+
+            showLoginMessage(
+                "Email और password डालें.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        loginBtn.disabled = true;
+
+        loginBtn.textContent =
+            "Logging in...";
+
+
+        try{
+
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+        }catch(error){
+
+            console.error(error);
+
+            showLoginMessage(
+                "❌ Login failed. Email या password गलत है.",
+                "error"
+            );
+
+        }
+
+
+        loginBtn.disabled = false;
+
+        loginBtn.textContent =
+            "🔐 Login";
+
+    }
+);
+
+
+/* ==============================
+   AUTH CHECK
+============================== */
+
+onAuthStateChanged(
+    auth,
+    (user) => {
+
+        if(user){
+
+            console.log(
+                "Logged in UID:",
+                user.uid
+            );
+
+
+            /* ONLY ADMIN */
+
+            if(user.uid !== ADMIN_UID){
+
+                showLoginMessage(
+                    "❌ यह account Admin नहीं है.",
+                    "error"
+                );
+
+                signOut(auth);
+
+                return;
+            }
+
+
+            loginPanel.style.display =
+                "none";
+
+            adminPanel.style.display =
+                "block";
+
+            adminEmail.textContent =
+                user.email;
+
+        }else{
+
+            loginPanel.style.display =
+                "block";
+
+            adminPanel.style.display =
+                "none";
+
+        }
+
+    }
+);
+
+
+/* ==============================
+   LOGOUT
+============================== */
+
+logoutBtn.addEventListener(
+    "click",
+    async () => {
+
+        await signOut(auth);
+
+    }
+);
 
 
 /* ==============================
@@ -326,7 +545,7 @@ function showMessage(text, type) {
 
 addProductBtn.addEventListener(
     "click",
-    async function () {
+    async () => {
 
         const name =
             productName.value.trim();
@@ -344,9 +563,7 @@ addProductBtn.addEventListener(
             productStock.checked;
 
 
-        /* VALIDATION */
-
-        if (!name) {
+        if(!name){
 
             showMessage(
                 "Product name डालें.",
@@ -357,7 +574,7 @@ addProductBtn.addEventListener(
         }
 
 
-        if (!price || price < 0) {
+        if(price < 0 || isNaN(price)){
 
             showMessage(
                 "सही price डालें.",
@@ -368,16 +585,17 @@ addProductBtn.addEventListener(
         }
 
 
-        addProductBtn.disabled = true;
+        addProductBtn.disabled =
+            true;
 
         addProductBtn.textContent =
             "Saving...";
 
 
-        try {
+        try{
 
             await addDoc(
-                collection(db, "products"),
+                collection(db,"products"),
                 {
 
                     name: name,
@@ -403,39 +621,38 @@ addProductBtn.addEventListener(
             );
 
 
-            /* CLEAR FORM */
-
             productName.value = "";
 
             productPrice.value = "";
 
             productImage.value = "";
 
-            productStock.checked = true;
+            productStock.checked =
+                true;
 
 
-        } catch (error) {
+        }catch(error){
 
             console.error(error);
 
             showMessage(
-                "❌ Product add नहीं हुआ. Firebase Rules check करें.",
+                "❌ Product add नहीं हुआ. Rules check करें.",
                 "error"
             );
 
         }
 
 
-        addProductBtn.disabled = false;
+        addProductBtn.disabled =
+            false;
 
         addProductBtn.textContent =
             "➕ Add Product";
 
     }
-
 );
 
 </script>
 
 </body>
-  </html>
+    </html>
