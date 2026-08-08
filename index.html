@@ -3,108 +3,529 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayra Enterprise</title>
+
+    <meta name="description" content="Kayra Enterprise - Quality cleaning products at affordable prices. Order on WhatsApp and pickup from our shop in Vav, Kamrej, Surat.">
+
+    <meta name="theme-color" content="#0a8f3d">
+
+    <title>Kayra Enterprise | Cleaning Products</title>
 
     <link rel="stylesheet" href="style.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 </head>
 
 <body>
 
+<!-- ================= HEADER ================= -->
+
 <header class="header">
 
-<div class="logo">
-<h2>Kayra Enterprise</h2>
-<p>Wholesale & Retail Cleaning Products</p>
-</div>
+    <div class="logo">
+        <h2>Kayra Enterprise</h2>
+        <p>Wholesale & Retail</p>
+    </div>
 
-<nav>
-
-<a href="#">Home</a>
-
-<a href="#">Products</a>
-
-<a href="#">Contact</a>
-
-</nav>
+    <nav class="navigation">
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+        <a href="#pickup">Pickup</a>
+        <a href="#contact">Contact</a>
+    </nav>
 
 </header>
 
 
-<section class="hero">
+<!-- ================= HOME / HERO ================= -->
 
-<h1>Welcome to Kayra Enterprise</h1>
+<main>
 
-<p>
-Best Quality Cleaning Products at Affordable Prices
-</p>
+<section id="home" class="hero">
 
-<a href="#products" class="btn">
-View Products
+    <div class="hero-content">
+
+        <span class="hero-badge">
+            🏪 Kayra Enterprise
+        </span>
+
+        <h1>
+            Quality Cleaning Products
+            <span>At Best Prices</span>
+        </h1>
+
+        <p>
+            Browse our products, order easily on WhatsApp
+            and collect your order directly from our shop.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#products" class="btn primary-btn">
+                🛍️ View Products
+            </a>
+
+            <a
+                href="https://wa.me/918673822563?text=Hello%20Kayra%20Enterprise%2C%20I%20want%20to%20know%20about%20your%20products."
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn whatsapp-btn"
+            >
+                💬 WhatsApp Us
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= SEARCH ================= -->
+
+<section class="search-section">
+
+    <div class="search-box">
+
+        <span class="search-icon">🔍</span>
+
+        <input
+            id="searchInput"
+            type="search"
+            placeholder="Search products..."
+            autocomplete="off"
+        >
+
+    </div>
+
+</section>
+
+
+<!-- ================= CATEGORIES ================= -->
+
+<section class="categories-section">
+
+    <div class="section-heading">
+
+        <span>Browse</span>
+
+        <h2>Categories</h2>
+
+    </div>
+
+    <div class="category-list">
+
+        <button
+            class="category-btn active"
+            data-category="all"
+            type="button"
+        >
+            All Products
+        </button>
+
+        <button
+            class="category-btn"
+            data-category="Broom"
+            type="button"
+        >
+            🧹 Brooms
+        </button>
+
+        <button
+            class="category-btn"
+            data-category="Mop"
+            type="button"
+        >
+            🧽 Mops
+        </button>
+
+        <button
+            class="category-btn"
+            data-category="Cleaning"
+            type="button"
+        >
+            🧴 Cleaning
+        </button>
+
+        <button
+            class="category-btn"
+            data-category="Other"
+            type="button"
+        >
+            📦 Other
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PRODUCTS ================= -->
+
+<section id="products" class="products-section">
+
+    <div class="section-heading">
+
+        <span>Our Collection</span>
+
+        <h2>Featured Products</h2>
+
+        <p>
+            Choose your product and order directly on WhatsApp.
+        </p>
+
+    </div>
+
+
+    <!--
+        IMPORTANT:
+        Products will be loaded here by JavaScript/Firebase.
+        Do NOT add product cards manually inside this div.
+    -->
+
+    <div
+        id="product-list"
+        class="product-grid"
+    >
+    </div>
+
+
+    <!-- No products message -->
+
+    <div
+        id="no-products"
+        class="no-products"
+        style="display:none;"
+    >
+
+        <div class="no-products-icon">
+            🔍
+        </div>
+
+        <h3>No products found</h3>
+
+        <p>
+            Try another product name or category.
+        </p>
+
+    </div>
+
+
+    <!-- Loading message -->
+
+    <div
+        id="products-loading"
+        class="products-loading"
+    >
+
+        <div class="loading-spinner"></div>
+
+        <p>
+            Loading products...
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================= PICKUP ================= -->
+
+<section id="pickup" class="pickup-section">
+
+    <div class="pickup-card">
+
+        <div class="pickup-icon">
+            🚶
+        </div>
+
+        <div class="pickup-content">
+
+            <span class="small-title">
+                Easy & Simple
+            </span>
+
+            <h2>
+                Pickup From Our Shop
+            </h2>
+
+            <p>
+                Order on WhatsApp and collect your product
+                directly from our shop.
+            </p>
+
+            <div class="pickup-highlight">
+
+                <strong>
+                    🚚 Delivery Charge: ₹0
+                </strong>
+
+                <span>
+                    Pickup Only
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= WHY CHOOSE US ================= -->
+
+<section class="features-section">
+
+    <div class="section-heading">
+
+        <span>Why Kayra Enterprise?</span>
+
+        <h2>Simple & Convenient</h2>
+
+    </div>
+
+
+    <div class="features-grid">
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                💰
+            </div>
+
+            <h3>Best Prices</h3>
+
+            <p>
+                Quality products at competitive prices.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                💬
+            </div>
+
+            <h3>WhatsApp Order</h3>
+
+            <p>
+                Order directly through WhatsApp in seconds.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🚶
+            </div>
+
+            <h3>Easy Pickup</h3>
+
+            <p>
+                Collect your order directly from our shop.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                ⭐
+            </div>
+
+            <h3>Quality Products</h3>
+
+            <p>
+                Products selected with quality in mind.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CONTACT ================= -->
+
+<section id="contact" class="contact-section">
+
+    <div class="section-heading">
+
+        <span>Get In Touch</span>
+
+        <h2>Contact Kayra Enterprise</h2>
+
+    </div>
+
+
+    <div class="contact-card">
+
+        <div class="contact-item">
+
+            <div class="contact-icon">
+                📱
+            </div>
+
+            <div>
+
+                <small>WhatsApp</small>
+
+                <a
+                    href="https://wa.me/918673822563"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    8673822563
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="contact-item">
+
+            <div class="contact-icon">
+                📍
+            </div>
+
+            <div>
+
+                <small>Shop Address</small>
+
+                <p>
+                    39, Karunesh Park,<br>
+                    Vav Road, Vav,<br>
+                    Kamrej, Surat
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="https://www.google.com/maps/search/?api=1&query=39%20Karunesh%20Park%20Vav%20Road%20Vav%20Kamrej%20Surat"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="map-btn"
+        >
+            📍 Open Location in Google Maps
+        </a>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- ================= FLOATING WHATSAPP ================= -->
+
+<a
+    href="https://wa.me/918673822563?text=Hello%20Kayra%20Enterprise%2C%20I%20want%20to%20know%20about%20your%20products."
+    target="_blank"
+    rel="noopener noreferrer"
+    class="floating-whatsapp"
+    aria-label="Chat on WhatsApp"
+>
+    💬
 </a>
 
-</section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+
+            <h3>
+                Kayra Enterprise
+            </h3>
+
+            <p>
+                Wholesale & Retail Cleaning Products
+            </p>
+
+        </div>
 
 
-<section class="search">
+        <div class="footer-links">
 
-<input
-type="text"
-placeholder="Search Products..."
->
+            <a href="#home">
+                Home
+            </a>
 
-</section>
+            <a href="#products">
+                Products
+            </a>
 
+            <a href="#pickup">
+                Pickup
+            </a>
 
-<section id="products">
+            <a href="#contact">
+                Contact
+            </a>
 
-<h2>Featured Products</h2>
-
-<div class="product-grid" id="product-list">
-
-</div>
-
-</section>
-
-
-<section class="pickup">
-
-<h2>Pickup Only</h2>
-
-<p>No Delivery Charge</p>
-
-<p>
-
-39, Karunesh Park,
-
-Vav Road,
-
-Vav,
-
-Kamrej,
-
-Surat
-
-</p>
-
-</section>
+        </div>
 
 
-<footer>
+        <div class="footer-contact">
 
-<h3>Kayra Enterprise</h3>
+            <p>
+                📱 8673822563
+            </p>
 
-<p>WhatsApp : 8673822563</p>
+            <p>
+                📍 Vav, Kamrej, Surat
+            </p>
 
-<p>© 2026 All Rights Reserved</p>
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <p>
+            © 2026 Kayra Enterprise. All Rights Reserved.
+        </p>
+
+        <p>
+            Pickup Only • No Delivery Charge
+        </p>
+
+    </div>
 
 </footer>
 
-<script type="module" src="firebase.js"></script>
-<script src="script.js"></script>
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<!--
+    script.js is loaded as a module because
+    it will communicate with Firebase.
+-->
+
+<script
+    type="module"
+    src="script.js"
+></script>
 
 </body>
-
-</html>
+            </html>
