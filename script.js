@@ -24,11 +24,10 @@ const firebaseConfig = {
 
 
 // ==================================================
-// FIREBASE INITIALIZE
+// FIREBASE
 // ==================================================
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
 
 
@@ -36,47 +35,41 @@ const db = getFirestore(app);
 // WEBSITE ELEMENTS
 // ==================================================
 
-const productList =
-    document.getElementById("product-list");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const noProducts =
-    document.getElementById("no-products");
-
-const loading =
-    document.getElementById("products-loading");
+const productList = document.getElementById("product-list");
+const searchInput = document.getElementById("searchInput");
+const noProducts = document.getElementById("no-products");
+const loading = document.getElementById("products-loading");
 
 const categoryButtons =
     document.querySelectorAll(".category-btn");
 
 
 // ==================================================
-// WHATSAPP NUMBER
+// WHATSAPP
 // ==================================================
 
 const WHATSAPP_NUMBER = "918673822563";
 
 
 // ==================================================
-// PRODUCTS DATA
+// DATA
 // ==================================================
 
 let products = [];
-
 let selectedCategory = "all";
 
 
 // ==================================================
-// LOAD PRODUCTS FROM FIRESTORE
+// LOAD PRODUCTS
 // ==================================================
 
 async function loadProducts() {
 
     try {
 
-        loading.style.display = "block";
+        if (loading) {
+            loading.style.display = "block";
+        }
 
         const productsRef =
             collection(db, "products");
@@ -88,14 +81,18 @@ async function loadProducts() {
 
         snapshot.forEach((doc) => {
 
+            const data = doc.data();
+
             products.push({
                 id: doc.id,
-                ...doc.data()
+                ...data
             });
 
         });
 
-        loading.style.display = "none";
+        if (loading) {
+            loading.style.display = "none";
+        }
 
         renderProducts();
 
@@ -106,23 +103,29 @@ async function loadProducts() {
             error
         );
 
-        loading.style.display = "none";
+        if (loading) {
+            loading.style.display = "none";
+        }
 
-        productList.innerHTML = `
-            <div class="no-products">
-                <div class="no-products-icon">
-                    ⚠️
+        if (productList) {
+
+            productList.innerHTML = `
+                <div class="no-products">
+                    <div class="no-products-icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Products could not be loaded
+                    </h3>
+
+                    <p>
+                        Please try again later.
+                    </p>
                 </div>
+            `;
 
-                <h3>
-                    Products could not be loaded
-                </h3>
-
-                <p>
-                    Please try again later.
-                </p>
-            </div>
-        `;
+        }
 
     }
 
@@ -135,6 +138,11 @@ async function loadProducts() {
 
 function renderProducts() {
 
+    if (!productList) {
+        return;
+    }
+
+
     const searchText =
         searchInput
             ? searchInput.value
@@ -146,10 +154,12 @@ function renderProducts() {
     const filteredProducts =
         products.filter((product) => {
 
+            // Firebase field is "Name"
             const productName =
                 String(
-                    product.name || ""
+                    product.Name || ""
                 ).toLowerCase();
+
 
             const category =
                 String(
@@ -158,7 +168,9 @@ function renderProducts() {
 
 
             const matchesSearch =
-                productName.includes(searchText);
+                productName.includes(
+                    searchText
+                );
 
 
             const matchesCategory =
@@ -179,21 +191,26 @@ function renderProducts() {
 
     if (filteredProducts.length === 0) {
 
-        noProducts.style.display = "block";
+        if (noProducts) {
+            noProducts.style.display = "block";
+        }
 
         return;
 
     }
 
 
-    noProducts.style.display = "none";
+    if (noProducts) {
+        noProducts.style.display = "none";
+    }
 
 
     filteredProducts.forEach((product) => {
 
-        productList.appendChild(
-            createProductCard(product)
-        );
+        const card =
+            createProductCard(product);
+
+        productList.appendChild(card);
 
     });
 
@@ -212,27 +229,33 @@ function createProductCard(product) {
     card.className = "card";
 
 
+    // Firebase field: Name
     const name =
-        product.name || "Product";
+        product.Name || "Product";
 
 
+    // Firebase field: price
     const price =
         Number(product.price || 0);
 
 
+    // Firebase field: category
     const category =
         product.category || "Other";
 
 
+    // Firebase field: image
     const image =
         product.image ||
         "https://via.placeholder.com/500x500?text=Kayra+Enterprise";
 
 
+    // Firebase field: stock
     const stock =
         product.stock === true;
 
 
+    // WhatsApp message
     const message =
         `Hello Kayra Enterprise, I want to order ${name}. Price: ₹${price}. I will pickup from the shop.`;
 
@@ -247,7 +270,9 @@ function createProductCard(product) {
             src="${image}"
             alt="${escapeHTML(name)}"
             loading="lazy"
-            onerror="this.src='https://via.placeholder.com/500x500?text=Product'"
+            onerror="
+                this.src='https://via.placeholder.com/500x500?text=Product'
+            "
         >
 
         <div class="card-content">
@@ -256,21 +281,26 @@ function createProductCard(product) {
                 ${escapeHTML(name)}
             </h3>
 
+
             <div class="card-category">
                 ${escapeHTML(category)}
             </div>
+
 
             <div class="card-price">
                 ₹${price}
             </div>
 
+
             ${
                 stock
                 ?
                 `
+
                     <span class="card-stock">
                         ✓ In Stock
                     </span>
+
 
                     <a
                         href="${whatsappLink}"
@@ -280,20 +310,25 @@ function createProductCard(product) {
                     >
                         💬 Order on WhatsApp
                     </a>
+
                 `
                 :
                 `
+
                     <span class="card-stock out-of-stock">
                         Out of Stock
                     </span>
 
+
                     <div class="order-btn out-of-stock">
                         Currently Unavailable
                     </div>
+
                 `
             }
 
         </div>
+
     `;
 
 
@@ -310,7 +345,7 @@ if (searchInput) {
 
     searchInput.addEventListener(
         "input",
-        () => {
+        function () {
 
             renderProducts();
 
@@ -328,7 +363,7 @@ categoryButtons.forEach((button) => {
 
     button.addEventListener(
         "click",
-        () => {
+        function () {
 
             categoryButtons.forEach(
                 (btn) => {
@@ -360,7 +395,7 @@ categoryButtons.forEach((button) => {
 
 
 // ==================================================
-// SIMPLE HTML ESCAPE
+// HTML SECURITY
 // ==================================================
 
 function escapeHTML(value) {
@@ -376,7 +411,7 @@ function escapeHTML(value) {
 
 
 // ==================================================
-// START WEBSITE
+// START
 // ==================================================
 
 loadProducts();
