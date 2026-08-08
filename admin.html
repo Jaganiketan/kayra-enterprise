@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Kayra Enterprise - Admin</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f4;
+            color: #222;
+        }
+
+        .header {
+            background: #064d35;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header p {
+            margin: 6px 0 0;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 15px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #064d35;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #0aa765;
+        }
+
+        .stock-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .stock-box input {
+            width: 20px;
+            height: 20px;
+        }
+
+        .stock-box label {
+            margin: 0;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #08a65c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            display: none;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .success {
+            display: block;
+            background: #d9f8e8;
+            color: #08733f;
+        }
+
+        .error {
+            display: block;
+            background: #ffe1e1;
+            color: #a40000;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #064d35;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .note {
+            background: #fff8dc;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>Kayra Enterprise</h1>
+    <p>Admin Product Panel</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>➕ Add New Product</h2>
+
+        <label>Product Name</label>
+        <input
+            type="text"
+            id="productName"
+            placeholder="Example: Coconut Broom"
+        >
+
+        <label>Category</label>
+        <select id="productCategory">
+            <option value="Broom">Broom</option>
+            <option value="Cleaning">Cleaning</option>
+            <option value="Other">Other</option>
+        </select>
+
+        <label>Price (₹)</label>
+        <input
+            type="number"
+            id="productPrice"
+            placeholder="120"
+            min="0"
+        >
+
+        <label>Image URL</label>
+        <input
+            type="url"
+            id="productImage"
+            placeholder="https://example.com/image.jpg"
+        >
+
+        <div class="stock-box">
+            <input
+                type="checkbox"
+                id="productStock"
+                checked
+            >
+
+            <label for="productStock">
+                Product In Stock
+            </label>
+        </div>
+
+        <button id="addProductBtn">
+            ➕ Add Product
+        </button>
+
+        <div id="message" class="message"></div>
+
+        <div class="note">
+            💡 अभी image के लिए Image URL डालें।
+            बाद में हम ऐसा system बनाएँगे जिसमें आप
+            सीधे अपने mobile की Gallery से image upload
+            कर सकेंगे।
+        </div>
+
+    </div>
+
+    <a
+        href="index.html"
+        class="back"
+    >
+        ← Back to Website
+    </a>
+
+</div>
+
+
+<script type="module">
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+/* ==============================
+   FIREBASE CONFIG
+============================== */
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyBe1Gi-atOr6ugqIIHNs5W_8x6DH0oCY9g",
+
+    authDomain:
+        "kayraenterprise-8a2ec.firebaseapp.com",
+
+    projectId:
+        "kayraenterprise-8a2ec",
+
+    storageBucket:
+        "kayraenterprise-8a2ec.firebasestorage.app",
+
+    messagingSenderId:
+        "541311529043",
+
+    appId:
+        "1:541311529043:web:d8e2300b7290e7caa356a6"
+};
+
+
+/* ==============================
+   FIREBASE START
+============================== */
+
+const app =
+    initializeApp(firebaseConfig);
+
+const db =
+    getFirestore(app);
+
+
+/* ==============================
+   ELEMENTS
+============================== */
+
+const productName =
+    document.getElementById("productName");
+
+const productCategory =
+    document.getElementById("productCategory");
+
+const productPrice =
+    document.getElementById("productPrice");
+
+const productImage =
+    document.getElementById("productImage");
+
+const productStock =
+    document.getElementById("productStock");
+
+const addProductBtn =
+    document.getElementById("addProductBtn");
+
+const message =
+    document.getElementById("message");
+
+
+/* ==============================
+   MESSAGE
+============================== */
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+
+}
+
+
+/* ==============================
+   ADD PRODUCT
+============================== */
+
+addProductBtn.addEventListener(
+    "click",
+    async function () {
+
+        const name =
+            productName.value.trim();
+
+        const category =
+            productCategory.value;
+
+        const price =
+            Number(productPrice.value);
+
+        const image =
+            productImage.value.trim();
+
+        const stock =
+            productStock.checked;
+
+
+        /* VALIDATION */
+
+        if (!name) {
+
+            showMessage(
+                "Product name डालें.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        if (!price || price < 0) {
+
+            showMessage(
+                "सही price डालें.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        addProductBtn.disabled = true;
+
+        addProductBtn.textContent =
+            "Saving...";
+
+
+        try {
+
+            await addDoc(
+                collection(db, "products"),
+                {
+
+                    name: name,
+
+                    category: category,
+
+                    price: price,
+
+                    image: image,
+
+                    stock: stock,
+
+                    createdAt:
+                        serverTimestamp()
+
+                }
+            );
+
+
+            showMessage(
+                "✅ Product successfully added!",
+                "success"
+            );
+
+
+            /* CLEAR FORM */
+
+            productName.value = "";
+
+            productPrice.value = "";
+
+            productImage.value = "";
+
+            productStock.checked = true;
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "❌ Product add नहीं हुआ. Firebase Rules check करें.",
+                "error"
+            );
+
+        }
+
+
+        addProductBtn.disabled = false;
+
+        addProductBtn.textContent =
+            "➕ Add Product";
+
+    }
+
+);
+
+</script>
+
+</body>
+  </html>
