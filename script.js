@@ -1,76 +1,456 @@
+// ==================================================
+// KAYRA ENTERPRISE - SCRIPT.JS
+// PART 1
+// FIREBASE + PRODUCT LOADING + SEARCH + CATEGORY
+// ==================================================
+
+
+// ==================================================
+// FIREBASE IMPORTS
+// ==================================================
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+// ==================================================
+// FIREBASE CONFIG
+// ==================================================
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyBe1Gi-atOr6ugqIIHNs5W_8x6DH0oCY9g",
+
+    authDomain:
+        "kayraenterprise-8a2ec.firebaseapp.com",
+
+    projectId:
+        "kayraenterprise-8a2ec",
+
+    storageBucket:
+        "kayraenterprise-8a2ec.firebasestorage.app",
+
+    messagingSenderId:
+        "541311529043",
+
+    appId:
+        "1:541311529043:web:d8e2300b7290e7caa356a6"
+
+};
+
+
+// ==================================================
+// INITIALIZE FIREBASE
+// ==================================================
+
+const app =
+    initializeApp(firebaseConfig);
+
+const db =
+    getFirestore(app);
+
+
+// ==================================================
+// WEBSITE ELEMENTS
+// ==================================================
+
+const productList =
+    document.getElementById(
+        "product-list"
+    );
+
+const searchInput =
+    document.getElementById(
+        "searchInput"
+    );
+
+const noProducts =
+    document.getElementById(
+        "no-products"
+    );
+
+const loading =
+    document.getElementById(
+        "products-loading"
+    );
+
+const categoryButtons =
+    document.querySelectorAll(
+        ".category-btn"
+    );
+
+
+// ==================================================
+// WHATSAPP
+// ==================================================
+
+const WHATSAPP_NUMBER =
+    "918673822563";
+
+
+// ==================================================
+// PRODUCT DATA
+// ==================================================
+
+let products = [];
+
+let selectedCategory =
+    "all";
+
+
+// ==================================================
+// LOAD PRODUCTS FROM FIREBASE
+// ==================================================
+
+async function loadProducts() {
+
+    console.log(
+        "Loading products from Firebase..."
+    );
+
+
+    // Show loading
+
+    if (loading) {
+
+        loading.style.display =
+            "block";
+
+    }
+
+
+    try {
+
+        const productsRef =
+            collection(
+                db,
+                "products"
+            );
+
+
+        const snapshot =
+            await getDocs(
+                productsRef
+            );
+
+
+        products = [];
+
+
+        snapshot.forEach(
+            (docSnapshot) => {
+
+                const data =
+                    docSnapshot.data();
+
+
+                products.push({
+
+                    id:
+                        docSnapshot.id,
+
+                    ...data
+
+                });
+
+            }
+        );
+
+
+        console.log(
+            "Products loaded:",
+            products
+        );
+
+
+        // Hide loading
+
+        if (loading) {
+
+            loading.style.display =
+                "none";
+
+        }
+
+
+        // Show products
+
+        renderProducts();
+
+
+    } catch (error) {
+
+        console.error(
+            "FIREBASE LOAD ERROR:",
+            error
+        );
+
+
+        // Hide loading
+
+        if (loading) {
+
+            loading.style.display =
+                "none";
+
+        }
+
+
+        // Show error
+
+        if (productList) {
+
+            productList.innerHTML = `
+
+                <div class="no-products">
+
+                    <div class="no-products-icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Products could not be loaded
+                    </h3>
+
+                    <p>
+                        Firebase से products load नहीं हो पाए।
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+}
+
+
+// ==================================================
+// SEARCH
+// ==================================================
+
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "input",
+        () => {
+
+            renderProducts();
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// CATEGORY FILTER
+// ==================================================
+
+categoryButtons.forEach(
+    (button) => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+
+                // Remove active
+
+                categoryButtons.forEach(
+                    (btn) => {
+
+                        btn.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+                // Add active
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                // Category
+
+                selectedCategory =
+                    button.dataset.category ||
+                    "all";
+
+
+                // Render
+
+                renderProducts();
+
+            }
+        );
+
+    }
+);
+
+
+// ==================================================
+// HTML SECURITY
+// ==================================================
+
+function escapeHTML(value) {
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+// ==================================================
+// PART 1 END
+// ==================================================
+// ==================================================
+// PART 2
+// RENDER PRODUCTS + PRODUCT CARD + FULL DETAILS
+// ==================================================
+
+
+// ==================================================
+// RENDER PRODUCTS
+// ==================================================
+
 function renderProducts() {
 
-if (!productList) {
-return;
+    if (!productList) {
+        return;
+    }
+
+
+    const searchText =
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const filteredProducts =
+        products.filter(
+            (product) => {
+
+                const productName =
+                    String(
+                        product.name ||
+                        product.Name ||
+                        ""
+                    ).toLowerCase();
+
+
+                const category =
+                    String(
+                        product.category ||
+                        "Other"
+                    );
+
+
+                const matchesSearch =
+                    productName.includes(
+                        searchText
+                    );
+
+
+                const matchesCategory =
+                    selectedCategory === "all" ||
+                    category === selectedCategory;
+
+
+                return (
+                    matchesSearch &&
+                    matchesCategory
+                );
+
+            }
+        );
+
+
+    productList.innerHTML = "";
+
+
+    if (
+        filteredProducts.length === 0
+    ) {
+
+        if (noProducts) {
+
+            noProducts.style.display =
+                "block";
+
+        }
+
+        return;
+
+    }
+
+
+    if (noProducts) {
+
+        noProducts.style.display =
+            "none";
+
+    }
+
+
+    filteredProducts.forEach(
+        (product) => {
+
+            const card =
+                createProductCard(
+                    product
+                );
+
+
+            productList.appendChild(
+                card
+            );
+
+        }
+    );
+
 }
 
-const searchText =
-searchInput
-? searchInput.value
-.trim()
-.toLowerCase()
-: "";
-
-const filteredProducts =
-products.filter((product) => {
-
-// Firebase field is "Name"    
-    const productName =    
-        String(    
-            product.name || ""    
-        ).toLowerCase();    
-
-
-    const category =    
-        String(    
-            product.category || "Other"    
-        );    
-
-
-    const matchesSearch =    
-        productName.includes(    
-            searchText    
-        );    
-
-
-    const matchesCategory =    
-        selectedCategory === "all" ||    
-        category === selectedCategory;    
-
-
-    return (    
-        matchesSearch &&    
-        matchesCategory    
-    );    
-
-});
-
-productList.innerHTML = "";
-
-if (filteredProducts.length === 0) {
-
-if (noProducts) {    
-    noProducts.style.display = "block";    
-}    
-
-return;
-
-}
-
-if (noProducts) {
-noProducts.style.display = "none";
-}
-
-filteredProducts.forEach((product) => {
-
-const card =    
-    createProductCard(product);    
-
-productList.appendChild(card);
-
-});
-
-}
 
 // ==================================================
 // CREATE PRODUCT CARD
@@ -78,9 +458,14 @@ productList.appendChild(card);
 
 function createProductCard(product) {
 
-    const card = document.createElement("div");
+    const card =
+        document.createElement(
+            "div"
+        );
 
-    card.className = "card";
+
+    card.className =
+        "card";
 
 
     const name =
@@ -90,11 +475,15 @@ function createProductCard(product) {
 
 
     const price =
-        Number(product.price || 0);
+        Number(
+            product.price || 0
+        );
 
 
     const offerPrice =
-        Number(product.offerPrice || 0);
+        Number(
+            product.offerPrice || 0
+        );
 
 
     const category =
@@ -104,6 +493,11 @@ function createProductCard(product) {
 
     const image =
         product.image ||
+        (
+            Array.isArray(product.images)
+                ? product.images[0]
+                : ""
+        ) ||
         "https://via.placeholder.com/500x500?text=Kayra+Enterprise";
 
 
@@ -122,7 +516,9 @@ function createProductCard(product) {
 
 
     const quantity =
-        Number(product.stockQty || 0);
+        Number(
+            product.stockQty || 0
+        );
 
 
     const featured =
@@ -133,25 +529,57 @@ function createProductCard(product) {
         product.isNew === true;
 
 
-    // Multiple images
+    // ==================================================
+    // MULTIPLE IMAGES
+    // ==================================================
+
     let images = [];
 
-    if (Array.isArray(product.images)) {
-        images = product.images.filter(Boolean);
+
+    if (
+        Array.isArray(
+            product.images
+        )
+    ) {
+
+        images =
+            product.images.filter(
+                (img) =>
+                    typeof img === "string" &&
+                    img.trim() !== ""
+            );
+
     }
 
-    // अगर images array नहीं है तो main image इस्तेमाल होगी
-    if (images.length === 0 && image) {
-        images.push(image);
+
+    if (
+        images.length === 0 &&
+        image
+    ) {
+
+        images.push(
+            image
+        );
+
     }
 
 
-    // WhatsApp
+    // ==================================================
+    // FINAL PRICE
+    // ==================================================
+
     const finalPrice =
-        offerPrice > 0 && offerPrice < price
+        offerPrice > 0 &&
+        offerPrice < price
+
             ? offerPrice
+
             : price;
 
+
+    // ==================================================
+    // WHATSAPP
+    // ==================================================
 
     const message =
         `Hello Kayra Enterprise, I want to order ${name}. Price: ₹${finalPrice}. I will pickup from the shop.`;
@@ -160,6 +588,10 @@ function createProductCard(product) {
     const whatsappLink =
         `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
+
+    // ==================================================
+    // CARD HTML
+    // ==================================================
 
     card.innerHTML = `
 
@@ -172,7 +604,9 @@ function createProductCard(product) {
             "
         >
 
+
         <div class="card-content">
+
 
             <h3>
                 ${escapeHTML(name)}
@@ -203,6 +637,7 @@ function createProductCard(product) {
                     :
 
                     `₹${price}`
+
                 }
 
             </div>
@@ -226,32 +661,43 @@ function createProductCard(product) {
                     Out of Stock
                 </span>
                 `
+
             }
 
 
             ${
                 featured
+
                 ?
+
                 `
                 <span class="card-badge">
                     ⭐ Featured
                 </span>
                 `
+
                 :
+
                 ""
+
             }
 
 
             ${
                 isNew
+
                 ?
+
                 `
                 <span class="card-badge">
                     🆕 New
                 </span>
                 `
+
                 :
+
                 ""
+
             }
 
 
@@ -286,6 +732,7 @@ function createProductCard(product) {
                     Currently Unavailable
                 </div>
                 `
+
             }
 
         </div>
@@ -293,54 +740,91 @@ function createProductCard(product) {
     `;
 
 
-    // Full details popup
+    // ==================================================
+    // DETAILS BUTTON
+    // ==================================================
+
     const detailsButton =
-        card.querySelector(".details-btn");
+        card.querySelector(
+            ".details-btn"
+        );
 
 
-    detailsButton.addEventListener(
-        "click",
-        () => {
+    if (detailsButton) {
 
-            showProductDetails({
+        detailsButton.addEventListener(
+            "click",
+            () => {
 
-                ...product,
+                showProductDetails({
 
-                name: name,
-                price: price,
-                offerPrice: offerPrice,
-                category: category,
-                image: image,
-                images: images,
-                stock: stock,
-                sku: sku,
-                description: description,
-                stockQty: quantity,
-                featured: featured,
-                isNew: isNew
+                    ...product,
 
-            });
+                    name:
+                        name,
 
-        }
-    );
+                    price:
+                        price,
+
+                    offerPrice:
+                        offerPrice,
+
+                    category:
+                        category,
+
+                    image:
+                        image,
+
+                    images:
+                        images,
+
+                    stock:
+                        stock,
+
+                    sku:
+                        sku,
+
+                    description:
+                        description,
+
+                    stockQty:
+                        quantity,
+
+                    featured:
+                        featured,
+
+                    isNew:
+                        isNew
+
+                });
+
+            }
+        );
+
+    }
 
 
     return card;
+
 }
+
+
 // ==================================================
 // PRODUCT DETAILS POPUP
 // ==================================================
 
 function showProductDetails(product) {
 
-    // पहले से popup है तो हटाओ
     const oldModal =
         document.getElementById(
             "productDetailsModal"
         );
 
+
     if (oldModal) {
+
         oldModal.remove();
+
     }
 
 
@@ -351,11 +835,15 @@ function showProductDetails(product) {
 
 
     const price =
-        Number(product.price || 0);
+        Number(
+            product.price || 0
+        );
 
 
     const offerPrice =
-        Number(product.offerPrice || 0);
+        Number(
+            product.offerPrice || 0
+        );
 
 
     const category =
@@ -378,7 +866,9 @@ function showProductDetails(product) {
 
 
     const quantity =
-        Number(product.stockQty || 0);
+        Number(
+            product.stockQty || 0
+        );
 
 
     const featured =
@@ -389,14 +879,24 @@ function showProductDetails(product) {
         product.isNew === true;
 
 
-    // Images
+    // ==================================================
+    // IMAGES
+    // ==================================================
+
     let images = [];
 
-    if (Array.isArray(product.images)) {
+
+    if (
+        Array.isArray(
+            product.images
+        )
+    ) {
 
         images =
             product.images.filter(
-                img => img
+                (img) =>
+                    typeof img === "string" &&
+                    img.trim() !== ""
             );
 
     }
@@ -414,7 +914,9 @@ function showProductDetails(product) {
     }
 
 
-    if (images.length === 0) {
+    if (
+        images.length === 0
+    ) {
 
         images.push(
             "https://via.placeholder.com/600x600?text=Product"
@@ -427,13 +929,22 @@ function showProductDetails(product) {
         images[0];
 
 
+    // ==================================================
+    // PRICE
+    // ==================================================
+
     const finalPrice =
         offerPrice > 0 &&
         offerPrice < price
 
             ? offerPrice
+
             : price;
 
+
+    // ==================================================
+    // WHATSAPP
+    // ==================================================
 
     const whatsappMessage =
         `Hello Kayra Enterprise, I want to order ${name}. Price: ₹${finalPrice}. I will pickup from the shop.`;
@@ -444,11 +955,13 @@ function showProductDetails(product) {
 
 
     // ==================================================
-    // MODAL
+    // CREATE MODAL
     // ==================================================
 
     const modal =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     modal.id =
@@ -458,6 +971,7 @@ function showProductDetails(product) {
     modal.innerHTML = `
 
         <div class="product-modal-overlay">
+
 
             <div class="product-modal">
 
@@ -496,28 +1010,29 @@ function showProductDetails(product) {
 
                         ${
                             images.map(
-                                (img, index) => `
+                                (
+                                    img,
+                                    index
+                                ) => `
 
-                                <button
-                                    type="button"
-                                    class="gallery-thumb ${
-                                        index === 0
-                                            ? "active"
-                                            : ""
-                                    }"
-                                    data-image="${escapeHTML(img)}"
-                                >
-
-                                    <img
-                                        src="${escapeHTML(img)}"
-                                        alt="Product image ${
-                                            index + 1
+                                    <button
+                                        type="button"
+                                        class="gallery-thumb ${
+                                            index === 0
+                                                ? "active"
+                                                : ""
                                         }"
+                                        data-image="${escapeHTML(img)}"
                                     >
 
-                                </button>
+                                        <img
+                                            src="${escapeHTML(img)}"
+                                            alt="Product image ${index + 1}"
+                                        >
 
-                            `
+                                    </button>
+
+                                `
                             ).join("")
                         }
 
@@ -527,6 +1042,7 @@ function showProductDetails(product) {
                     :
 
                     ""
+
                 }
 
 
@@ -544,6 +1060,7 @@ function showProductDetails(product) {
 
                     <div class="modal-badges">
 
+
                         <span class="modal-badge">
                             ${escapeHTML(category)}
                         </span>
@@ -555,9 +1072,7 @@ function showProductDetails(product) {
                             ?
 
                             `
-                            <span
-                                class="modal-badge featured"
-                            >
+                            <span class="modal-badge featured">
                                 ⭐ Featured
                             </span>
                             `
@@ -565,6 +1080,7 @@ function showProductDetails(product) {
                             :
 
                             ""
+
                         }
 
 
@@ -574,9 +1090,7 @@ function showProductDetails(product) {
                             ?
 
                             `
-                            <span
-                                class="modal-badge new"
-                            >
+                            <span class="modal-badge new">
                                 🆕 New
                             </span>
                             `
@@ -584,6 +1098,7 @@ function showProductDetails(product) {
                             :
 
                             ""
+
                         }
 
                     </div>
@@ -593,14 +1108,23 @@ function showProductDetails(product) {
 
                     <div class="modal-info">
 
+
                         <p>
-                            <strong>SKU:</strong>
+
+                            <strong>
+                                SKU:
+                            </strong>
+
                             ${escapeHTML(sku)}
+
                         </p>
 
 
                         <p>
-                            <strong>Stock:</strong>
+
+                            <strong>
+                                Stock:
+                            </strong>
 
                             ${
                                 stock
@@ -614,9 +1138,15 @@ function showProductDetails(product) {
 
 
                         <p>
-                            <strong>Quantity:</strong>
+
+                            <strong>
+                                Quantity:
+                            </strong>
+
                             ${quantity}
+
                         </p>
+
 
                     </div>
 
@@ -625,13 +1155,16 @@ function showProductDetails(product) {
 
                     <div class="description-box">
 
+
                         <h3>
                             Description
                         </h3>
 
+
                         <p>
                             ${escapeHTML(description)}
                         </p>
+
 
                     </div>
 
@@ -639,6 +1172,7 @@ function showProductDetails(product) {
                     <!-- PRICE -->
 
                     <div class="modal-price">
+
 
                         <strong>
                             ₹${finalPrice}
@@ -664,7 +1198,9 @@ function showProductDetails(product) {
                             :
 
                             ""
+
                         }
+
 
                     </div>
 
@@ -694,6 +1230,7 @@ function showProductDetails(product) {
                             📦 Currently Out of Stock
                         </div>
                         `
+
                     }
 
 
@@ -712,7 +1249,7 @@ function showProductDetails(product) {
 
 
     // ==================================================
-    // CLOSE
+    // CLOSE BUTTON
     // ==================================================
 
     const closeButton =
@@ -721,35 +1258,50 @@ function showProductDetails(product) {
         );
 
 
-    closeButton.onclick =
-        () => modal.remove();
+    if (closeButton) {
+
+        closeButton.onclick =
+            () => {
+
+                modal.remove();
+
+            };
+
+    }
 
 
-    // बाहर overlay पर tap करने से बंद
+    // ==================================================
+    // OVERLAY CLOSE
+    // ==================================================
+
     const overlay =
         modal.querySelector(
             ".product-modal-overlay"
         );
 
 
-    overlay.addEventListener(
-        "click",
-        (event) => {
+    if (overlay) {
 
-            if (
-                event.target === overlay
-            ) {
+        overlay.addEventListener(
+            "click",
+            (event) => {
 
-                modal.remove();
+                if (
+                    event.target === overlay
+                ) {
+
+                    modal.remove();
+
+                }
 
             }
+        );
 
-        }
-    );
+    }
 
 
     // ==================================================
-    // MULTIPLE IMAGE SWITCH
+    // IMAGE SWITCH
     // ==================================================
 
     const mainImage =
@@ -775,12 +1327,16 @@ function showProductDetails(product) {
                         thumb.dataset.image;
 
 
-                    mainImage.src =
-                        newImage;
+                    if (mainImage) {
+
+                        mainImage.src =
+                            newImage;
+
+                    }
 
 
                     thumbnails.forEach(
-                        item => {
+                        (item) => {
 
                             item.classList.remove(
                                 "active"
@@ -805,9 +1361,8 @@ function showProductDetails(product) {
     // ESC KEY
     // ==================================================
 
-    document.addEventListener(
-        "keydown",
-        function closeWithEscape(event) {
+    const closeWithEscape =
+        (event) => {
 
             if (
                 event.key === "Escape"
@@ -822,7 +1377,62 @@ function showProductDetails(product) {
 
             }
 
-        }
+        };
+
+
+    document.addEventListener(
+        "keydown",
+        closeWithEscape
     );
 
-        }
+            }
+// ==================================================
+// PART 3
+// START WEBSITE
+// ==================================================
+
+
+// ==================================================
+// START FIREBASE PRODUCT LOADING
+// ==================================================
+
+loadProducts();
+
+
+// ==================================================
+// SAFETY ERROR HANDLER
+// ==================================================
+
+window.addEventListener(
+    "error",
+    (event) => {
+
+        console.error(
+            "Website Error:",
+            event.error || event.message
+        );
+
+    }
+);
+
+
+// ==================================================
+// FIREBASE PROMISE ERROR HANDLER
+// ==================================================
+
+window.addEventListener(
+    "unhandledrejection",
+    (event) => {
+
+        console.error(
+            "Firebase/Promise Error:",
+            event.reason
+        );
+
+    }
+);
+
+
+// ==================================================
+// END SCRIPT.JS
+// ==================================================
