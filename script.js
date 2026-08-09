@@ -14,53 +14,31 @@ import {
 // ==================================================
 
 const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyBe1Gi-atOr6ugqIIHNs5W_8x6DH0oCY9g",
-
-    authDomain:
-        "kayraenterprise-8a2ec.firebaseapp.com",
-
-    projectId:
-        "kayraenterprise-8a2ec",
-
-    storageBucket:
-        "kayraenterprise-8a2ec.firebasestorage.app",
-
-    messagingSenderId:
-        "541311529043",
-
-    appId:
-        "1:541311529043:web:d8e2300b7290e7caa356a6"
+    apiKey: "AIzaSyBe1Gi-atOr6ugqIIHNs5W_8x6DH0oCY9g",
+    authDomain: "kayraenterprise-8a2ec.firebaseapp.com",
+    projectId: "kayraenterprise-8a2ec",
+    storageBucket: "kayraenterprise-8a2ec.firebasestorage.app",
+    messagingSenderId: "541311529043",
+    appId: "1:541311529043:web:d8e2300b7290e7caa356a6"
 };
 
 
 // ==================================================
-// FIREBASE
+// FIREBASE START
 // ==================================================
 
-const app =
-    initializeApp(firebaseConfig);
-
-const db =
-    getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 
 // ==================================================
-// WEBSITE ELEMENTS
+// ELEMENTS
 // ==================================================
 
-const productList =
-    document.getElementById("product-list");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const noProducts =
-    document.getElementById("no-products");
-
-const loading =
-    document.getElementById("products-loading");
+const productList = document.getElementById("product-list");
+const searchInput = document.getElementById("searchInput");
+const noProducts = document.getElementById("no-products");
+const loading = document.getElementById("products-loading");
 
 const categoryButtons =
     document.querySelectorAll(".category-btn");
@@ -70,8 +48,7 @@ const categoryButtons =
 // WHATSAPP
 // ==================================================
 
-const WHATSAPP_NUMBER =
-    "918673822563";
+const WHATSAPP_NUMBER = "918673822563";
 
 
 // ==================================================
@@ -79,675 +56,110 @@ const WHATSAPP_NUMBER =
 // ==================================================
 
 let products = [];
-
-let selectedCategory =
-    "all";
+let selectedCategory = "all";
 
 
 // ==================================================
-// PRODUCT DETAIL STATE
+// SAFE HTML
 // ==================================================
 
-let detailImages = [];
-
-let detailImageIndex = 0;
-
-
-// ==================================================
-// CREATE DETAIL MODAL
-// ==================================================
-
-function createDetailModal() {
-
-    if (
-        document.getElementById(
-            "productDetailModal"
-        )
-    ) {
-        return;
-    }
-
-
-    const modal =
-        document.createElement("div");
-
-    modal.id =
-        "productDetailModal";
-
-
-    modal.innerHTML = `
-
-        <div
-            class="product-detail-overlay"
-            id="productDetailOverlay"
-        >
-
-            <div
-                class="product-detail-box"
-            >
-
-                <button
-                    type="button"
-                    class="detail-close"
-                    id="detailClose"
-                    aria-label="Close"
-                >
-                    ✕
-                </button>
-
-
-                <div
-                    class="detail-gallery"
-                >
-
-                    <button
-                        type="button"
-                        class="gallery-arrow gallery-prev"
-                        id="galleryPrev"
-                    >
-                        ‹
-                    </button>
-
-
-                    <img
-                        id="detailMainImage"
-                        src=""
-                        alt="Product"
-                    >
-
-
-                    <button
-                        type="button"
-                        class="gallery-arrow gallery-next"
-                        id="galleryNext"
-                    >
-                        ›
-                    </button>
-
-                </div>
-
-
-                <div
-                    class="gallery-counter"
-                    id="galleryCounter"
-                >
-                </div>
-
-
-                <div
-                    class="detail-thumbnails"
-                    id="detailThumbnails"
-                >
-                </div>
-
-
-                <div
-                    class="detail-content"
-                >
-
-                    <div
-                        class="detail-badges"
-                        id="detailBadges"
-                    >
-                    </div>
-
-
-                    <h2
-                        id="detailName"
-                    >
-                    </h2>
-
-
-                    <div
-                        class="detail-category"
-                        id="detailCategory"
-                    >
-                    </div>
-
-
-                    <div
-                        class="detail-price"
-                        id="detailPrice"
-                    >
-                    </div>
-
-
-                    <div
-                        class="detail-stock"
-                        id="detailStock"
-                    >
-                    </div>
-
-
-                    <div
-                        class="detail-info"
-                        id="detailInfo"
-                    >
-                    </div>
-
-
-                    <div
-                        class="detail-description"
-                        id="detailDescription"
-                    >
-                    </div>
-
-
-                    <div
-                        class="detail-buttons"
-                    >
-
-                        <a
-                            id="detailWhatsapp"
-                            class="detail-whatsapp"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            💬 Order on WhatsApp
-                        </a>
-
-
-                        <button
-                            type="button"
-                            id="detailShare"
-                            class="detail-share"
-                        >
-                            📤 Share Product
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-    `;
-
-
-    document.body.appendChild(modal);
-
-
-    addDetailStyles();
-
-
-    document
-        .getElementById(
-            "detailClose"
-        )
-        .addEventListener(
-            "click",
-            closeProductDetails
-        );
-
-
-    document
-        .getElementById(
-            "productDetailOverlay"
-        )
-        .addEventListener(
-            "click",
-            function(event) {
-
-                if (
-                    event.target.id ===
-                    "productDetailOverlay"
-                ) {
-                    closeProductDetails();
-                }
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "galleryPrev"
-        )
-        .addEventListener(
-            "click",
-            function(event) {
-
-                event.stopPropagation();
-
-                showDetailImage(
-                    detailImageIndex - 1
-                );
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "galleryNext"
-        )
-        .addEventListener(
-            "click",
-            function(event) {
-
-                event.stopPropagation();
-
-                showDetailImage(
-                    detailImageIndex + 1
-                );
-
-            }
-        );
-
-
-    document
-        .getElementById(
-            "detailShare"
-        )
-        .addEventListener(
-            "click",
-            shareProduct
-        );
-
-
-    document.addEventListener(
-        "keydown",
-        function(event) {
-
-            const modal =
-                document.getElementById(
-                    "productDetailModal"
-                );
-
-            if (
-                !modal ||
-                !modal.classList.contains(
-                    "open"
-                )
-            ) {
-                return;
-            }
-
-
-            if (
-                event.key === "Escape"
-            ) {
-                closeProductDetails();
-            }
-
-
-            if (
-                event.key === "ArrowLeft"
-            ) {
-                showDetailImage(
-                    detailImageIndex - 1
-                );
-            }
-
-
-            if (
-                event.key === "ArrowRight"
-            ) {
-                showDetailImage(
-                    detailImageIndex + 1
-                );
-            }
-
-        }
-    );
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
 }
 
 
 // ==================================================
-// DETAIL CSS
+// IMAGE URL
 // ==================================================
 
-function addDetailStyles() {
+function safeImage(url) {
 
-    if (
-        document.getElementById(
-            "productDetailStyles"
-        )
-    ) {
-        return;
+    if (!url) return "";
+
+    try {
+
+        const parsed = new URL(url);
+
+        if (
+            parsed.protocol === "https:" ||
+            parsed.protocol === "http:"
+        ) {
+            return url;
+        }
+
+    } catch (error) {}
+
+    return "";
+
+}
+
+
+// ==================================================
+// SHOW ERROR
+// ==================================================
+
+function showFirebaseError(error) {
+
+    console.error("Firebase Error:", error);
+
+    if (loading) {
+        loading.style.display = "none";
     }
 
-
-    const style =
-        document.createElement("style");
-
-    style.id =
-        "productDetailStyles";
-
-
-    style.textContent = `
-
-        .product-detail-overlay {
-
-            position:fixed;
-            inset:0;
-            background:rgba(0,0,0,.72);
-            z-index:99999;
-            display:none;
-            align-items:center;
-            justify-content:center;
-            padding:12px;
-            overflow-y:auto;
-
-        }
-
-
-        .product-detail-overlay.open {
-
-            display:flex;
-
-        }
-
-
-        .product-detail-box {
-
-            width:100%;
-            max-width:650px;
-            max-height:95vh;
-            overflow-y:auto;
-            background:#fff;
-            border-radius:20px;
-            position:relative;
-            box-shadow:0 10px 40px rgba(0,0,0,.3);
-
-        }
-
-
-        .detail-close {
-
-            position:absolute;
-            right:12px;
-            top:12px;
-            z-index:5;
-            width:42px;
-            height:42px;
-            border-radius:50%;
-            border:0;
-            background:rgba(0,0,0,.65);
-            color:#fff;
-            font-size:20px;
-            cursor:pointer;
-            margin:0;
-            padding:0;
-
-        }
-
-
-        .detail-gallery {
-
-            width:100%;
-            height:380px;
-            background:#f5f5f5;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            position:relative;
-            overflow:hidden;
-
-        }
-
-
-        .detail-gallery img {
-
-            width:100%;
-            height:100%;
-            object-fit:contain;
-            padding:12px;
-
-        }
-
-
-        .gallery-arrow {
-
-            position:absolute;
-            top:50%;
-            transform:translateY(-50%);
-            width:42px;
-            height:42px;
-            border-radius:50%;
-            border:0;
-            background:rgba(0,0,0,.55);
-            color:#fff;
-            font-size:34px;
-            line-height:35px;
-            padding:0;
-            margin:0;
-            z-index:2;
-
-        }
-
-
-        .gallery-prev {
-
-            left:10px;
-
-        }
-
-
-        .gallery-next {
-
-            right:10px;
-
-        }
-
-
-        .gallery-counter {
-
-            text-align:center;
-            font-size:12px;
-            color:#777;
-            padding:8px 0 2px;
-
-        }
-
-
-        .detail-thumbnails {
-
-            display:flex;
-            gap:8px;
-            overflow-x:auto;
-            padding:8px 15px;
-
-        }
-
-
-        .detail-thumb {
-
-            width:65px;
-            height:65px;
-            min-width:65px;
-            border-radius:9px;
-            object-fit:cover;
-            border:2px solid transparent;
-            cursor:pointer;
-
-        }
-
-
-        .detail-thumb.active {
-
-            border-color:#08a65c;
-
-        }
-
-
-        .detail-content {
-
-            padding:18px;
-
-        }
-
-
-        .detail-badges {
-
-            display:flex;
-            gap:7px;
-            flex-wrap:wrap;
-            margin-bottom:8px;
-
-        }
-
-
-        .detail-badge {
-
-            background:#e9f8f0;
-            color:#08733f;
-            padding:5px 9px;
-            border-radius:20px;
-            font-size:12px;
-            font-weight:bold;
-
-        }
-
-
-        .detail-content h2 {
-
-            margin:5px 0;
-            font-size:25px;
-            color:#064d35;
-
-        }
-
-
-        .detail-category {
-
-            color:#777;
-            font-size:14px;
-            margin-bottom:10px;
-
-        }
-
-
-        .detail-price {
-
-            font-size:25px;
-            font-weight:700;
-            color:#08a65c;
-            margin:10px 0;
-
-        }
-
-
-        .detail-old-price {
-
-            color:#888;
-            font-size:15px;
-            text-decoration:line-through;
-            margin-left:8px;
-
-        }
-
-
-        .detail-stock {
-
-            display:inline-block;
-            padding:7px 10px;
-            border-radius:20px;
-            background:#d9f8e8;
-            color:#08733f;
-            font-size:13px;
-            font-weight:bold;
-            margin-bottom:15px;
-
-        }
-
-
-        .detail-stock.out {
-
-            background:#ffe1e1;
-            color:#a40000;
-
-        }
-
-
-        .detail-info {
-
-            background:#f5f7f6;
-            border-radius:12px;
-            padding:12px;
-            font-size:14px;
-            line-height:1.7;
-            margin-bottom:15px;
-
-        }
-
-
-        .detail-description {
-
-            font-size:15px;
-            line-height:1.7;
-            color:#444;
-            white-space:pre-line;
-            margin-bottom:18px;
-
-        }
-
-
-        .detail-buttons {
-
-            display:flex;
-            flex-direction:column;
-            gap:10px;
-
-        }
-
-
-        .detail-whatsapp,
-        .detail-share {
-
-            width:100%;
-            border:0;
-            border-radius:11px;
-            padding:14px;
-            text-align:center;
-            text-decoration:none;
-            font-size:16px;
-            font-weight:bold;
-            cursor:pointer;
-            margin:0;
-
-        }
-
-
-        .detail-whatsapp {
-
-            background:#08a65c;
-            color:#fff;
-
-        }
-
-
-        .detail-share {
-
-            background:#064d35;
-            color:#fff;
-
-        }
-
-
-        @media(max-width:600px) {
-
-            .detail-gallery {
-
-                height:330px;
-
-            }
-
-            .product-detail-box {
-
-                max-height:96vh;
-                border-radius:16px;
-
-            }
-
-        }
-
-    `;
-
-
-    document.head.appendChild(style);
+    if (noProducts) {
+        noProducts.style.display = "none";
+    }
+
+    if (productList) {
+
+        productList.innerHTML = `
+
+            <div class="no-products"
+                 style="
+                 display:block;
+                 padding:25px;
+                 text-align:center;
+                 background:#fff;
+                 border-radius:15px;
+                 ">
+
+                <div
+                    style="
+                    font-size:40px;
+                    margin-bottom:10px;
+                    ">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Products load नहीं हो पाए
+                </h3>
+
+                <p>
+                    Internet connection check करें
+                    और page refresh करें।
+                </p>
+
+                <small
+                    style="
+                    color:#777;
+                    word-break:break-word;
+                    ">
+                    ${escapeHTML(error?.message || "Unknown error")}
+                </small>
+
+            </div>
+
+        `;
+
+    }
 
 }
 
@@ -758,105 +170,49 @@ function addDetailStyles() {
 
 async function loadProducts() {
 
+    console.log("Loading products from Firebase...");
+
+    if (loading) {
+        loading.style.display = "block";
+    }
+
+    if (productList) {
+        productList.innerHTML = "";
+    }
+
     try {
 
-        createDetailModal();
-
-
-        if (loading) {
-
-            loading.style.display =
-                "block";
-
-        }
-
-
         const productsRef =
-            collection(
-                db,
-                "products"
-            );
-
+            collection(db, "products");
 
         const snapshot =
-            await getDocs(
-                productsRef
-            );
+            await getDocs(productsRef);
 
+        console.log(
+            "Firebase products:",
+            snapshot.size
+        );
 
         products = [];
 
+        snapshot.forEach((item) => {
 
-        snapshot.forEach(
-            (doc) => {
+            products.push({
+                id: item.id,
+                ...item.data()
+            });
 
-                const data =
-                    doc.data();
-
-
-                products.push({
-
-                    id:
-                        doc.id,
-
-                    ...data
-
-                });
-
-            }
-        );
-
+        });
 
         if (loading) {
-
-            loading.style.display =
-                "none";
-
+            loading.style.display = "none";
         }
-
 
         renderProducts();
 
-
     } catch (error) {
 
-        console.error(
-            "Firebase Error:",
-            error
-        );
-
-
-        if (loading) {
-
-            loading.style.display =
-                "none";
-
-        }
-
-
-        if (productList) {
-
-            productList.innerHTML = `
-
-                <div class="no-products">
-
-                    <div class="no-products-icon">
-                        ⚠️
-                    </div>
-
-                    <h3>
-                        Products could not be loaded
-                    </h3>
-
-                    <p>
-                        Please try again later.
-                    </p>
-
-                </div>
-
-            `;
-
-        }
+        showFirebaseError(error);
 
     }
 
@@ -869,76 +225,72 @@ async function loadProducts() {
 
 function renderProducts() {
 
-    if (!productList) {
-
-        return;
-
-    }
-
+    if (!productList) return;
 
     const searchText =
         searchInput
-            ?
-            searchInput.value
-                .trim()
-                .toLowerCase()
-            :
-            "";
+            ? searchInput.value.trim().toLowerCase()
+            : "";
 
 
     const filteredProducts =
-        products.filter(
-            (product) => {
+        products.filter((product) => {
 
-                const productName =
-                    String(
-                        product.name ||
-                        product.Name ||
-                        ""
-                    ).toLowerCase();
-
-
-                const category =
-                    String(
-                        product.category ||
-                        "Other"
-                    );
+            const name =
+                String(
+                    product.name ||
+                    product.Name ||
+                    ""
+                ).toLowerCase();
 
 
-                const matchesSearch =
-                    productName.includes(
-                        searchText
-                    );
-
-
-                const matchesCategory =
-                    selectedCategory === "all" ||
-                    category === selectedCategory;
-
-
-                return (
-                    matchesSearch &&
-                    matchesCategory
+            const category =
+                String(
+                    product.category ||
+                    "Other"
                 );
 
-            }
-        );
+
+            const description =
+                String(
+                    product.description ||
+                    ""
+                ).toLowerCase();
 
 
-    productList.innerHTML =
-        "";
+            const sku =
+                String(
+                    product.sku ||
+                    ""
+                ).toLowerCase();
 
 
-    if (
-        filteredProducts.length ===
-        0
-    ) {
+            const matchesSearch =
+                name.includes(searchText) ||
+                description.includes(searchText) ||
+                sku.includes(searchText);
+
+
+            const matchesCategory =
+                selectedCategory === "all" ||
+                category === selectedCategory;
+
+
+            return (
+                matchesSearch &&
+                matchesCategory
+            );
+
+        });
+
+
+    productList.innerHTML = "";
+
+
+    if (filteredProducts.length === 0) {
 
         if (noProducts) {
-
-            noProducts.style.display =
-                "block";
-
+            noProducts.style.display = "block";
         }
 
         return;
@@ -947,28 +299,56 @@ function renderProducts() {
 
 
     if (noProducts) {
+        noProducts.style.display = "none";
+    }
 
-        noProducts.style.display =
-            "none";
+
+    filteredProducts.forEach((product) => {
+
+        productList.appendChild(
+            createProductCard(product)
+        );
+
+    });
+
+}
+
+
+// ==================================================
+// GET PRODUCT IMAGES
+// ==================================================
+
+function getProductImages(product) {
+
+    let images = [];
+
+    if (
+        Array.isArray(product.images)
+    ) {
+
+        images =
+            product.images.filter(
+                item => typeof item === "string" && item
+            );
 
     }
 
 
-    filteredProducts.forEach(
-        (product) => {
-
-            const card =
-                createProductCard(
-                    product
-                );
+    const mainImage =
+        product.image || "";
 
 
-            productList.appendChild(
-                card
-            );
+    if (
+        mainImage &&
+        !images.includes(mainImage)
+    ) {
 
-        }
-    );
+        images.unshift(mainImage);
+
+    }
+
+
+    return images;
 
 }
 
@@ -980,17 +360,11 @@ function renderProducts() {
 function createProductCard(product) {
 
     const card =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
+    card.className = "card";
 
-    card.className =
-        "card";
-
-
-    card.style.cursor =
-        "pointer";
+    card.style.cursor = "pointer";
 
 
     const name =
@@ -999,18 +373,276 @@ function createProductCard(product) {
         "Product";
 
 
+    const category =
+        product.category ||
+        "Other";
+
+
     const price =
-        Number(
-            product.price ||
-            0
-        );
+        Number(product.price || 0);
 
 
     const offerPrice =
-        Number(
-            product.offerPrice ||
-            0
-        );
+        Number(product.offerPrice || 0);
+
+
+    const stock =
+        product.stock === true;
+
+
+    const imageList =
+        getProductImages(product);
+
+
+    const image =
+        imageList[0] || "";
+
+
+    const whatsappPrice =
+        offerPrice > 0 &&
+        offerPrice < price
+            ? offerPrice
+            : price;
+
+
+    const message =
+        `Hello Kayra Enterprise, I want to order ${name}. Price: ₹${whatsappPrice}. I will pickup from the shop.`;
+
+
+    const whatsappLink =
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+
+    card.innerHTML = `
+
+        ${
+            image
+            ?
+            `
+            <div
+                style="
+                width:100%;
+                height:260px;
+                background:#f5f5f5;
+                border-radius:15px;
+                overflow:hidden;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                ">
+
+                <img
+                    src="${escapeHTML(image)}"
+                    alt="${escapeHTML(name)}"
+                    loading="lazy"
+                    style="
+                    width:100%;
+                    height:100%;
+                    object-fit:contain;
+                    display:block;
+                    "
+                    onerror="
+                    this.style.display='none';
+                    "
+                >
+
+            </div>
+            `
+            :
+            `
+            <div
+                style="
+                height:200px;
+                background:#f1f1f1;
+                border-radius:15px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:50px;
+                ">
+                📦
+            </div>
+            `
+        }
+
+
+        <div class="card-content">
+
+            <h3>
+                ${escapeHTML(name)}
+            </h3>
+
+
+            <div class="card-category">
+                ${escapeHTML(category)}
+            </div>
+
+
+            ${
+                offerPrice > 0 &&
+                offerPrice < price
+                ?
+                `
+                <div class="card-price">
+
+                    ₹${offerPrice}
+
+                    <span
+                        style="
+                        color:#888;
+                        text-decoration:line-through;
+                        font-size:14px;
+                        margin-left:7px;
+                        ">
+                        ₹${price}
+                    </span>
+
+                </div>
+                `
+                :
+                `
+                <div class="card-price">
+                    ₹${price}
+                </div>
+                `
+            }
+
+
+            <div
+                style="
+                display:flex;
+                gap:6px;
+                flex-wrap:wrap;
+                margin:8px 0;
+                ">
+
+                ${
+                    product.featured === true
+                    ?
+                    `
+                    <span
+                        style="
+                        background:#fff3cd;
+                        padding:5px 9px;
+                        border-radius:20px;
+                        font-size:12px;
+                        font-weight:bold;
+                        ">
+                        ⭐ Featured
+                    </span>
+                    `
+                    :
+                    ""
+                }
+
+
+                ${
+                    product.isNew === true
+                    ?
+                    `
+                    <span
+                        style="
+                        background:#e8f1ff;
+                        padding:5px 9px;
+                        border-radius:20px;
+                        font-size:12px;
+                        font-weight:bold;
+                        ">
+                        🆕 New
+                    </span>
+                    `
+                    :
+                    ""
+                }
+
+            </div>
+
+
+            ${
+                stock
+                ?
+                `
+                <span class="card-stock">
+                    ✓ In Stock
+                </span>
+                `
+                :
+                `
+                <span
+                    class="card-stock out-of-stock">
+                    Out of Stock
+                </span>
+                `
+            }
+
+
+            <div
+                style="
+                margin-top:12px;
+                color:#087f5b;
+                font-weight:bold;
+                text-align:center;
+                ">
+                👆 Tap for Full Details
+            </div>
+
+
+            ${
+                stock
+                ?
+                `
+                <a
+                    href="${whatsappLink}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="order-btn"
+                    onclick="event.stopPropagation()"
+                >
+                    💬 Order on WhatsApp
+                </a>
+                `
+                :
+                `
+                <div
+                    class="order-btn out-of-stock">
+                    Currently Unavailable
+                </div>
+                `
+            }
+
+        </div>
+
+    `;
+
+
+    card.addEventListener(
+        "click",
+        function () {
+
+            openProductDetails(product);
+
+        }
+    );
+
+
+    return card;
+
+}
+
+
+// ==================================================
+// FULL PRODUCT DETAILS
+// ==================================================
+
+function openProductDetails(product) {
+
+    closeProductDetails();
+
+
+    const name =
+        product.name ||
+        product.Name ||
+        "Product";
 
 
     const category =
@@ -1018,97 +650,536 @@ function createProductCard(product) {
         "Other";
 
 
-    const image =
-        product.image ||
-        getProductImages(product)[0] ||
-        "";
+    const price =
+        Number(product.price || 0);
+
+
+    const offerPrice =
+        Number(product.offerPrice || 0);
 
 
     const stock =
         product.stock === true;
 
 
-    const stockQty =
-        Number(
-            product.stockQty ||
-            0
-        );
+    const quantity =
+        Number(product.stockQty || 0);
 
 
-    const featured =
-        product.featured === true;
+    const sku =
+        product.sku ||
+        "Not set";
 
 
-    const isNew =
-        product.isNew === true;
+    const description =
+        product.description ||
+        "No description available.";
 
 
-    const displayPrice =
-        (
-            offerPrice > 0 &&
-            offerPrice < price
-        )
-        ?
-        `
-
-            <span>
-                ₹${offerPrice}
-            </span>
-
-            <del>
-                ₹${price}
-            </del>
-
-        `
-        :
-        `₹${price}`;
+    const images =
+        getProductImages(product);
 
 
-    card.innerHTML = `
+    const firstImage =
+        images[0] || "";
 
-        <img
-            src="${escapeHTML(image)}"
-            alt="${escapeHTML(name)}"
-            loading="lazy"
+
+    const orderPrice =
+        offerPrice > 0 &&
+        offerPrice < price
+            ? offerPrice
+            : price;
+
+
+    const whatsappMessage =
+        `Hello Kayra Enterprise, I want to order ${name}. Price: ₹${orderPrice}. I will pickup from the shop.`;
+
+
+    const whatsappLink =
+        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
+
+
+    const modal =
+        document.createElement("div");
+
+
+    modal.id =
+        "productDetailsModal";
+
+
+    modal.style.cssText = `
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.75);
+        z-index:99999;
+        overflow-y:auto;
+        padding:20px;
+    `;
+
+
+    modal.innerHTML = `
+
+        <div
             style="
+            max-width:650px;
+            margin:20px auto;
+            background:white;
+            border-radius:20px;
+            overflow:hidden;
+            position:relative;
+            ">
+
+
+            <button
+                id="closeDetails"
+                type="button"
+                style="
+                position:absolute;
+                right:12px;
+                top:12px;
+                z-index:5;
+                width:45px;
+                height:45px;
+                padding:0;
+                margin:0;
+                border-radius:50%;
+                background:#222;
+                color:white;
+                font-size:25px;
+                ">
+                ×
+            </button>
+
+
+            <div
+                id="detailMainImage"
+                style="
                 width:100%;
-                height:220px;
-                object-fit:contain;
-                background:#f7f7f7;
-                border-radius:12px;
-            "
-            onerror="
-                this.style.display='none'
-            "
-        >
+                height:380px;
+                background:#f5f5f5;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                ">
+
+                ${
+                    firstImage
+                    ?
+                    `
+                    <img
+                        src="${escapeHTML(firstImage)}"
+                        style="
+                        width:100%;
+                        height:100%;
+                        object-fit:contain;
+                        "
+                        alt="${escapeHTML(name)}"
+                    >
+                    `
+                    :
+                    `
+                    <div
+                        style="
+                        font-size:70px;
+                        ">
+                        📦
+                    </div>
+                    `
+                }
+
+            </div>
 
 
-        <div class="card-content">
+            ${
+                images.length > 1
+                ?
+                `
+                <div
+                    style="
+                    display:flex;
+                    gap:8px;
+                    padding:10px;
+                    overflow-x:auto;
+                    ">
+
+                    ${
+                        images.map(
+                            (img,index) =>
+                            `
+                            <img
+                                src="${escapeHTML(img)}"
+                                data-image="${escapeHTML(img)}"
+                                class="detail-thumb"
+                                style="
+                                width:70px;
+                                height:70px;
+                                object-fit:cover;
+                                border-radius:10px;
+                                border:2px solid #ddd;
+                                flex-shrink:0;
+                                "
+                                alt="Photo ${index+1}"
+                            >
+                            `
+                        ).join("")
+                    }
+
+                </div>
+                `
+                :
+                ""
+            }
+
 
             <div
                 style="
-                    display:flex;
-                    gap:6px;
-                    flex-wrap:wrap;
-                    margin-bottom:7px;
-                "
-            >
+                padding:20px;
+                ">
+
+
+                <h2
+                    style="
+                    margin-top:0;
+                    color:#064d35;
+                    ">
+                    ${escapeHTML(name)}
+                </h2>
+
+
+                <div
+                    style="
+                    display:inline-block;
+                    background:#eee;
+                    padding:6px 12px;
+                    border-radius:20px;
+                    font-weight:bold;
+                    ">
+                    ${escapeHTML(category)}
+                </div>
+
 
                 ${
-                    featured
+                    product.featured === true
                     ?
                     `
                     <span
                         style="
-                            background:#fff3cd;
-                            padding:4px 8px;
-                            border-radius:15px;
-                            font-size:11px;
-                            font-weight:bold;
-                        "
-                    >
+                        display:inline-block;
+                        background:#fff3cd;
+                        padding:6px 12px;
+                        border-radius:20px;
+                        margin-left:5px;
+                        font-weight:bold;
+                        ">
                         ⭐ Featured
                     </span>
                     `
                     :
-           
+                    ""
+                }
+
+
+                ${
+                    product.isNew === true
+                    ?
+                    `
+                    <span
+                        style="
+                        display:inline-block;
+                        background:#e8f1ff;
+                        padding:6px 12px;
+                        border-radius:20px;
+                        margin-left:5px;
+                        font-weight:bold;
+                        ">
+                        🆕 New
+                    </span>
+                    `
+                    :
+                    ""
+                }
+
+
+                <p>
+                    <strong>SKU:</strong>
+                    ${escapeHTML(sku)}
+                </p>
+
+
+                <p>
+                    <strong>Stock:</strong>
+                    ${
+                        stock
+                        ?
+                        "🟢 In Stock"
+                        :
+                        "🔴 Out of Stock"
+                           }
+                </p>
+
+                <p>
+                    <strong>Quantity:</strong>
+                    ${quantity}
+                </p>
+
+                ${
+                    description
+                    ?
+                    `
+                    <div
+                        style="
+                        background:#f7f7f7;
+                        padding:15px;
+                        border-radius:12px;
+                        margin:15px 0;
+                        ">
+
+                        <strong>Description</strong>
+
+                        <p
+                            style="
+                            white-space:pre-wrap;
+                            margin-bottom:0;
+                            ">
+                            ${escapeHTML(description)}
+                        </p>
+
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+                <div
+                    style="
+                    margin:15px 0;
+                    ">
+
+                    ${
+                        offerPrice > 0 &&
+                        offerPrice < price
+
+                        ?
+
+                        `
+                        <span
+                            style="
+                            font-size:28px;
+                            font-weight:bold;
+                            color:#08a65c;
+                            ">
+                            ₹${offerPrice}
+                        </span>
+
+                        <span
+                            style="
+                            margin-left:8px;
+                            color:#888;
+                            text-decoration:line-through;
+                            font-size:18px;
+                            ">
+                            ₹${price}
+                        </span>
+
+                        <span
+                            style="
+                            margin-left:8px;
+                            color:#d93025;
+                            font-weight:bold;
+                            ">
+                            OFFER
+                        </span>
+                        `
+
+                        :
+
+                        `
+                        <span
+                            style="
+                            font-size:28px;
+                            font-weight:bold;
+                            color:#08a65c;
+                            ">
+                            ₹${price}
+                        </span>
+                        `
+                    }
+
+                </div>
+
+                ${
+                    stock
+
+                    ?
+
+                    `
+                    <a
+                        href="${whatsappLink}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style="
+                        display:block;
+                        text-align:center;
+                        text-decoration:none;
+                        background:#20d866;
+                        color:white;
+                        padding:15px;
+                        border-radius:12px;
+                        font-size:18px;
+                        font-weight:bold;
+                        ">
+                        💬 Order on WhatsApp
+                    </a>
+                    `
+
+                    :
+
+                    `
+                    <div
+                        style="
+                        text-align:center;
+                        background:#ddd;
+                        padding:15px;
+                        border-radius:12px;
+                        font-weight:bold;
+                        ">
+                        Currently Unavailable
+                    </div>
+                    `
+                }
+
+            </div>
+
+        </div>
+
+    `;
+
+    document.body.appendChild(modal);
+
+    document
+        .getElementById("closeDetails")
+        .onclick = closeProductDetails;
+
+    modal.addEventListener(
+        "click",
+        function(event) {
+
+            if (event.target === modal) {
+                closeProductDetails();
+            }
+
+        }
+    );
+
+    const thumbnails =
+        modal.querySelectorAll(
+            ".detail-thumb"
+        );
+
+    const mainImage =
+        modal.querySelector(
+            "#detailMainImage img"
+        );
+
+    thumbnails.forEach(
+        thumb => {
+
+            thumb.addEventListener(
+                "click",
+                function() {
+
+                    if (mainImage) {
+
+                        mainImage.src =
+                            thumb.dataset.image;
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// CLOSE PRODUCT DETAILS
+// ==================================================
+
+function closeProductDetails() {
+
+    const modal =
+        document.getElementById(
+            "productDetailsModal"
+        );
+
+    if (modal) {
+        modal.remove();
+    }
+
+}
+
+
+// ==================================================
+// SEARCH
+// ==================================================
+
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "input",
+        function() {
+
+            renderProducts();
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// CATEGORY FILTER
+// ==================================================
+
+categoryButtons.forEach(
+    button => {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                categoryButtons.forEach(
+                    btn => {
+
+                        btn.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+                button.classList.add(
+                    "active"
+                );
+
+                selectedCategory =
+                    button.dataset.category ||
+                    "all";
+
+                renderProducts();
+
+            }
+        );
+
+    }
+);
+
+
+// ==================================================
+// START WEBSITE
+// ==================================================
+
+loadProducts();
