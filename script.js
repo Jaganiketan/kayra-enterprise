@@ -97,12 +97,35 @@ const WHATSAPP_NUMBER =
     "918673822563";
 
 // ==================================================
-// SAVE WHATSAPP ORDER TO FIREBASE
+// SAVE CUSTOMER WHATSAPP ORDER TO FIREBASE
 // ==================================================
 
-async function saveWhatsAppOrder(product) {
+async function saveWhatsAppOrder(
+    product,
+    customerName,
+    customerPhone,
+    orderQuantity
+) {
 
     try {
+
+        const quantity =
+            Math.max(
+                1,
+                parseInt(orderQuantity || 1)
+            );
+
+        const unitPrice =
+            Number(
+                product.finalPrice ||
+                product.offerPrice ||
+                product.price ||
+                0
+            );
+
+        const totalAmount =
+            unitPrice * quantity;
+
 
         const orderData = {
 
@@ -113,25 +136,29 @@ async function saveWhatsAppOrder(product) {
                 product.name || "Product",
 
             price:
-                Number(product.price || 0),
-
-            offerPrice:
-                Number(product.offerPrice || 0),
-
-            finalPrice:
-                Number(product.finalPrice || 0),
+                unitPrice,
 
             quantity:
-                1,
+                quantity,
+
+            totalAmount:
+                totalAmount,
+
+            customerName:
+                String(
+                    customerName || ""
+                ).trim(),
+
+            customerPhone:
+                String(
+                    customerPhone || ""
+                ).replace(/\D/g, ""),
 
             status:
                 "pending",
 
             source:
                 "WhatsApp",
-
-            customerName:
-                "WhatsApp Customer",
 
             pickup:
                 true,
@@ -153,7 +180,7 @@ async function saveWhatsAppOrder(product) {
 
 
         console.log(
-            "Order saved:",
+            "Customer order saved:",
             orderRef.id
         );
 
