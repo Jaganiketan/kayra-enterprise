@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kayra Enterprise - Admin v2</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f3f5f4;color:#222}.head{background:#064d35;color:white;text-align:center;padding:18px}.wrap{max-width:900px;margin:auto;padding:14px}.card{background:white;border-radius:15px;padding:16px;margin-bottom:15px;box-shadow:0 3px 14px #0001}h2{color:#064d35;margin:0 0 12px;font-size:20px}label{display:block;font-weight:bold;font-size:13px;margin:10px 0 5px}input,select,textarea{width:100%;padding:11px;border:1px solid #ccc;border-radius:9px}textarea{min-height:70px}.btn{border:0;border-radius:9px;padding:11px;font-weight:bold;cursor:pointer}.green{background:#08a65c;color:white}.red{background:#d93025;color:white}.gray{background:#555;color:white}.full{width:100%;margin-top:10px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{text-align:center;background:#f1faf6;padding:12px;border-radius:10px}.num{font-size:22px;font-weight:bold;color:#087f5b}.small{font-size:12px;color:#666}.msg{display:none;padding:9px;margin-top:8px;border-radius:8px;text-align:center}.ok{display:block;background:#d9f8e8;color:#08733f}.err{display:block;background:#ffe1e1;color:#a40000}.item{border:1px solid #ddd;border-radius:12px;padding:11px;margin-top:9px}.item img{width:100%;height:170px;object-fit:contain;background:#f5f5f5;border-radius:9px}.row{display:flex;gap:7px}.row>*{flex:1}.back{display:block;text-align:center;color:#064d35;font-weight:bold;margin:20px}.status{padding:4px 8px;border-radius:12px;background:#fff3cd;font-size:11px;font-weight:bold}.completed{background:#d9f8e8}.cancelled{background:#ffe1e1}.thumbs{display:flex;gap:5px;overflow:auto}.thumbs img{width:55px;height:55px;object-fit:cover}.actions{display:flex;gap:6px;margin-top:7px}.actions>*{flex:1}
+</style>
+</head>
+<body>
+<div class="head"><h2 style="color:white;margin:0">Kayra Enterprise</h2><div>Admin Dashboard & Order Management v2</div></div>
+<div class="wrap">
+
+<div class="card" id="login">
+<h2>🔐 Admin Login</h2>
+<label>Email</label><input id="email" type="email" value="jaganiketan2@gmail.com">
+<label>Password</label><input id="pass" type="password">
+<button id="loginBtn" class="btn green full">Login</button><div id="loginMsg" class="msg"></div>
+</div>
+
+<div id="panel" style="display:none">
+<div class="card"><div class="small">Logged in as <b id="user"></b></div><button id="logout" class="btn red full">Logout</button></div>
+
+<div class="card"><h2>📊 Dashboard</h2><div class="grid">
+<div class="stat"><div id="tp" class="num">0</div><div class="small">Products</div></div>
+<div class="stat"><div id="is" class="num">0</div><div class="small">In Stock</div></div>
+<div class="stat"><div id="to" class="num">0</div><div class="small">Total Orders</div></div>
+<div class="stat"><div id="po" class="num">0</div><div class="small">Pending</div></div>
+<div class="stat"><div id="tod" class="num">0</div><div class="small">Today Orders</div></div>
+<div class="stat"><div id="sales" class="num">₹0</div><div class="small">This Month Sales</div></div>
+</div></div>
+
+<div class="card"><h2>➕ Add Product</h2>
+<label>Name *</label><input id="name">
+<label>Category</label><select id="cat"><option>Broom</option><option>Mop</option><option>Cleaning</option><option>Other</option></select>
+<label>SKU</label><input id="sku">
+<label>Description</label><textarea id="desc"></textarea>
+<div class="row"><div><label>Regular Price *</label><input id="price" type="number"></div><div><label>Offer Price</label><input id="offer" type="number"></div></div>
+<label>Stock Quantity</label><input id="qty" type="number" value="1">
+<label><input id="stock" type="checkbox" checked style="width:auto"> 🟢 In Stock</label>
+<label><input id="featured" type="checkbox" style="width:auto"> ⭐ Featured</label>
+<label><input id="newp" type="checkbox" style="width:auto"> 🆕 New</label>
+<label>📷 Product Photos</label><input id="photos" type="file" accept="image/*" multiple>
+<div id="upmsg" class="small"></div>
+<button id="add" class="btn green full">➕ Add Product</button><div id="mainMsg" class="msg"></div>
+</div>
+
+<div class="card"><h2>📦 Manage Products</h2><input id="psearch" placeholder="Search products..."><div id="plist">Loading...</div></div>
+
+<div class="card"><h2>📋 Order History</h2>
+<input id="osearch" placeholder="Search customer/product/phone...">
+<div class="row" style="margin-top:8px"><select id="filter"><option value="all">All</option><option>pending</option><option>completed</option><option>cancelled</option></select><select id="period"><option value="all">All Time</option><option value="today">Today</option><option value="month">This Month</option></select></div>
+<div id="olist">Loading...</div></div>
+
+<div class="card"><h2>📈 Monthly Report</h2><input id="month" type="month"><div class="grid" style="margin-top:8px">
+<div class="stat"><div id="ro" class="num">0</div><div class="small">Orders</div></div>
+<div class="stat"><div id="rc" class="num">0</div><div class="small">Completed</div></div>
+<div class="stat"><div id="rx" class="num">0</div><div class="small">Cancelled</div></div>
+<div class="stat"><div id="rs" class="num">₹0</div><div class="small">Sales</div></div>
+</div></div>
+<div class="card"><h2>🏆 Best Selling</h2><div id="best">No completed sales yet.</div></div>
+</div>
+<a class="back" href="index.html">← Back to Website</a>
+</div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import{getFirestore,collection,getDocs,addDoc,doc,updateDoc,deleteDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import{getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const cfg={apiKey:"AIzaSyBe1Gi-atOr6ugqIIHNs5W_8x6DH0oCY9g",authDomain:"kayraenterprise-8a2ec.firebaseapp.com",projectId:"kayraenterprise-8a2ec",storageBucket:"kayraenterprise-8a2ec.firebasestorage.app",messagingSenderId:"541311529043",appId:"1:541311529043:web:d8e2300b7290e7caa356a6"};
+const app=initializeApp(cfg),db=getFirestore(app),auth=getAuth(app),UID="nXHIW6ntWCZilxyxoupg9kgATsy2";
+const CLOUD="dzasxahe9",PRESET="shopupload";let ps=[],os=[];
+const $=x=>document.getElementById(x),money=x=>"₹"+Number(x||0).toLocaleString("en-IN");
+const esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const date=o=>o?.createdAt?.toDate?o.createdAt.toDate():new Date(o?.createdAt||0);
+function show(el,t,c){el.textContent=t;el.className="msg "+c}
+
+$("loginBtn").onclick=async()=>{try{await signInWithEmailAndPassword(auth,$("email").value.trim(),$("pass").value)}catch(e){show($("loginMsg"),"❌ Login failed","err")}};
+$("logout").onclick=()=>signOut(auth);
+onAuthStateChanged(auth,async u=>{if(!u){$("login").style.display="block";$("panel").style.display="none";return}if(u.uid!==UID){show($("loginMsg"),"❌ Admin account नहीं है","err");return}$("login").style.display="none";$("panel").style.display="block";$("user").textContent=u.email;await Promise.all([loadP(),loadO()]);});
+
+async function upload(f){let d=new FormData();d.append("file",f);d.append("upload_preset",PRESET);let r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`,{method:"POST",body:d});if(!r.ok)throw Error("upload");return(await r.json()).secure_url}
+
+$("add").onclick=async()=>{let n=$("name").value.trim(),pr=Number($("price").value);if(!n||!pr)return show($("mainMsg"),"Name और price जरूरी है","err");$("add").disabled=true;try{let imgs=[];for(let f of $("photos").files)imgs.push(await upload(f));await addDoc(collection(db,"products"),{name:n,category:$("cat").value,sku:$("sku").value.trim(),description:$("desc").value.trim(),price:pr,offerPrice:Number($("offer").value||0),stockQty:Number($("qty").value||0),stock:$("stock").checked,featured:$("featured").checked,isNew:$("newp").checked,image:imgs[0]||"",images:imgs,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});show($("mainMsg"),"✅ Product added","ok");["name","sku","desc","price","offer"].forEach(x=>$(x).value="");$("photos").value="";await loadP()}catch(e){show($("mainMsg"),"❌ Product save/upload failed","err")}$("add").disabled=false};
+
+async function loadP(){let s=await getDocs(collection(db,"products"));ps=s.docs.map(x=>({id:x.id,...x.data()}));$("tp").textContent=ps.length;$("is").textContent=ps.filter(p=>p.stock===true).length;renderP()}
+$("psearch").oninput=renderP;
+function renderP(){let q=$("psearch").value.toLowerCase(),a=ps.filter(p=>String(p.name||p.Name||"").toLowerCase().includes(q));$("plist").innerHTML=a.length?a.map(p=>{let n=p.name||p.Name||"Product",im=p.images?.filter(Boolean)||(p.image?[p.image]:[]),pr=Number(p.price||0),of=Number(p.offerPrice||0);return `<div class="item">${im[0]?`<img src="${esc(im[0])}">`:""}<b>${esc(n)}</b><div class="small">${esc(p.category||"Other")} · ${esc(p.sku||"")}</div><div style="color:#08a65c;font-weight:bold">${money(of>0&&of<pr?of:pr)} ${of>0&&of<pr?`<s>${money(pr)}</s>`:""}</div><div class="actions"><button class="btn green" data-e="${p.id}">✏️ Edit</button><button class="btn red" data-d="${p.id}">🗑️ Delete</button></div><button class="btn gray full" data-s="${p.id}">${p.stock?"Mark Out of Stock":"Mark In Stock"}</button></div>`}).join(""):"<div class='small'>No products.</div>";document.querySelectorAll("[data-e]").forEach(b=>b.onclick=()=>editP(b.dataset.e));document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>delP(b.dataset.d));document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>stockP(b.dataset.s))}
+async function editP(id){let p=ps.find(x=>x.id===id),n=prompt("Product name:",p.name||"");if(n===null)return;let pr=prompt("Regular price:",p.price||0);if(pr===null)return;let of=prompt("Offer price:",p.offerPrice||0);if(of===null)return;let q=prompt("Stock quantity:",p.stockQty||0);if(q===null)return;await updateDoc(doc(db,"products",id),{name:n,price:Number(pr),offerPrice:Number(of),stockQty:Number(q),stock:Number(q)>0,updatedAt:serverTimestamp()});await loadP()}
+async function delP(id){if(confirm("Product delete करें?")){await deleteDoc(doc(db,"products",id));await loadP()}}
+async function stockP(id){let p=ps.find(x=>x.id===id);await updateDoc(doc(db,"products",id),{stock:!p.stock,updatedAt:serverTimestamp()});await loadP()}
+
+async function loadO(){let s=await getDocs(collection(db,"orders"));os=s.docs.map(x=>({id:x.id,...x.data()}));renderO();dash();report();best()}
+$("osearch").oninput=renderO;$("filter").onchange=renderO;$("period").onchange=renderO;$("month").onchange=report;
+function match(o){let q=$("osearch").value.toLowerCase(),st=$("filter").value,per=$("period").value,d=date(o),now=new Date(),text=JSON.stringify(o).toLowerCase();if(q&&!text.includes(q))return false;if(st!="all"&&String(o.status||"pending").toLowerCase()!=st)return false;if(per=="today"&&d.toDateString()!=now.toDateString())return false;if(per=="month"&&(d.getMonth()!=now.getMonth()||d.getFullYear()!=now.getFullYear()))return false;return true}
+function renderO(){let a=os.filter(match).sort((a,b)=>date(b)-date(a));$("olist").innerHTML=a.length?a.map(o=>{let st=String(o.status||"pending").toLowerCase(),n=o.customerName||o.name||"Customer",p=o.productName||o.product||"Product",q=o.quantity||1,total=o.total||o.amount||o.price||0;return `<div class="item"><b>${esc(n)}</b> <span class="status ${st}">${st}</span><div>${esc(p)} × ${q}</div><div class="small">${date(o).toLocaleString("en-IN")} · ${esc(o.phone||o.mobile||"")}</div><b style="color:#08a65c">${money(total)}</b>${st=="pending"?`<div class="actions"><button class="btn green" data-c="${o.id}">✅ Completed</button><button class="btn red" data-x="${o.id}">❌ Cancelled</button></div>`:""}</div>`}).join(""):"<div class='small'>No orders found.</div>";document.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>setO(b.dataset.c,"completed"));document.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>setO(b.dataset.x,"cancelled"))}
+async function setO(id,st){await updateDoc(doc(db,"orders",id),{status:st,updatedAt:serverTimestamp()});await loadO()}
+function dash(){let now=new Date(),m=os.filter(o=>{let d=date(o);return d.getMonth()==now.getMonth()&&d.getFullYear()==now.getFullYear()});$("to").textContent=os.length;$("po").textContent=os.filter(o=>String(o.status||"pending").toLowerCase()=="pending").length;$("tod").textContent=os.filter(o=>date(o).toDateString()==now.toDateString()).length;$("sales").textContent=money(m.filter(o=>String(o.status||"pending")!="cancelled").reduce((s,o)=>s+Number(o.total||o.amount||o.price||0),0))}
+function report(){let now=new Date(),v=$("month").value||`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;$("month").value=v;let [y,m]=v.split("-").map(Number),a=os.filter(o=>{let d=date(o);return d.getFullYear()==y&&d.getMonth()+1==m});$("ro").textContent=a.length;$("rc").textContent=a.filter(o=>o.status=="completed").length;$("rx").textContent=a.filter(o=>o.status=="cancelled").length;$("rs").textContent=money(a.filter(o=>o.status!="cancelled").reduce((s,o)=>s+Number(o.total||o.amount||o.price||0),0))}
+function best(){let m={};os.filter(o=>o.status=="completed").forEach(o=>{let n=o.productName||o.product||"Product";m[n]=(m[n]||0)+Number(o.quantity||1)});$("best").innerHTML=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,10).map((x,i)=>`<div class="item">${i+1}. <b>${esc(x[0])}</b><div class="small">Sold: ${x[1]}</div></div>`).join("")||"No completed sales yet."}
+</script>
+</body></html>
