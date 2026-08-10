@@ -16,9 +16,10 @@ import {
 import {
     getFirestore,
     collection,
-    getDocs
+    getDocs,
+    addDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
 
 // ==================================================
 // FIREBASE CONFIG
