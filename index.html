@@ -526,6 +526,108 @@
     type="module"
     src="script.js"
 ></script>
+    
+<!-- ================= CUSTOMER ORDER MODAL V2 ================= -->
 
+<div id="customerOrderModal" class="order-modal" style="display:none;">
+
+  <div class="order-modal-box">
+
+    <button
+      type="button"
+      id="closeOrderModal"
+      class="order-close"
+    >
+      ✕
+    </button>
+
+    <h2>🛒 Place Your Order</h2>
+
+    <p class="order-subtitle">
+      Please enter your details to continue.
+    </p>
+
+    <div class="order-product-box">
+
+      <div>
+        <b id="orderProductName">Product</b>
+      </div>
+
+      <div>
+        Price:
+        <b id="orderProductPrice">₹0</b>
+      </div>
+
+    </div>
+
+    <label>
+      👤 Customer Name *
+    </label>
+
+    <input
+      id="customerName"
+      type="text"
+      placeholder="Enter your name"
+      autocomplete="name"
+    >
+
+    <label>
+      📱 WhatsApp Number *
+    </label>
+
+    <input
+      id="customerPhone"
+      type="tel"
+      inputmode="numeric"
+      maxlength="10"
+      placeholder="10 digit WhatsApp number"
+      autocomplete="tel"
+    >
+
+    <label>
+      📦 Quantity
+    </label>
+
+    <input
+      id="customerQuantity"
+      type="number"
+      min="1"
+      value="1"
+    >
+
+    <div class="order-total-box">
+
+      <span>Total Amount</span>
+
+      <strong id="customerOrderTotal">
+        ₹0
+      </strong>
+
+    </div>
+
+    <div
+      id="customerOrderMessage"
+      class="order-message"
+      style="display:none;"
+    ></div>
+
+    <button
+      type="button"
+      id="confirmCustomerOrder"
+      class="confirm-order-btn"
+    >
+      💬 Confirm & Order on WhatsApp
+    </button>
+
+    <p class="order-note">
+      🏪 Pickup from shop • No delivery charge
+    </p>
+
+  </div>
+
+</div>
+
+<!-- ================= END CUSTOMER ORDER MODAL ================= -->
+    
 </body>
             </html>
