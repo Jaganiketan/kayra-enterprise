@@ -96,6 +96,83 @@ const categoryButtons =
 const WHATSAPP_NUMBER =
     "918673822563";
 
+// ==================================================
+// SAVE WHATSAPP ORDER TO FIREBASE
+// ==================================================
+
+async function saveWhatsAppOrder(product) {
+
+    try {
+
+        const orderData = {
+
+            productId:
+                product.id || "",
+
+            productName:
+                product.name || "Product",
+
+            price:
+                Number(product.price || 0),
+
+            offerPrice:
+                Number(product.offerPrice || 0),
+
+            finalPrice:
+                Number(product.finalPrice || 0),
+
+            quantity:
+                1,
+
+            status:
+                "pending",
+
+            source:
+                "WhatsApp",
+
+            customerName:
+                "WhatsApp Customer",
+
+            pickup:
+                true,
+
+            createdAt:
+                serverTimestamp()
+
+        };
+
+
+        const orderRef =
+            await addDoc(
+                collection(
+                    db,
+                    "orders"
+                ),
+                orderData
+            );
+
+
+        console.log(
+            "Order saved:",
+            orderRef.id
+        );
+
+
+        return orderRef.id;
+
+
+    } catch (error) {
+
+        console.error(
+            "ORDER SAVE ERROR:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
 
 // ==================================================
 // PRODUCT DATA
@@ -740,7 +817,65 @@ function createProductCard(product) {
 
     `;
 
+// ==================================================
+// WHATSAPP ORDER CLICK
+// ==================================================
 
+const orderButton =
+    card.querySelector(
+        ".order-btn"
+    );
+
+
+if (
+    orderButton &&
+    stock
+) {
+
+    orderButton.addEventListener(
+        "click",
+        async (event) => {
+
+            event.preventDefault();
+
+
+            const orderProduct = {
+
+                id:
+                    product.id || "",
+
+                name:
+                    name,
+
+                price:
+                    price,
+
+                offerPrice:
+                    offerPrice,
+
+                finalPrice:
+                    finalPrice
+
+            };
+
+
+            // Open WhatsApp immediately
+            window.open(
+                whatsappLink,
+                "_blank"
+            );
+
+
+            // Save order in Firebase
+            await saveWhatsAppOrder(
+                orderProduct
+            );
+
+        }
+    );
+
+}
+    
     // ==================================================
     // DETAILS BUTTON
     // ==================================================
