@@ -859,47 +859,287 @@ if (
     stock
 ) {
 
-    orderButton.addEventListener(
-        "click",
-        async (event) => {
+   orderButton.addEventListener("click", async (event) => {
 
-            event.preventDefault();
+    event.preventDefault();
 
+    // CUSTOMER ORDER FORM
+    const modal = document.createElement("div");
 
+    modal.style.cssText = `
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.65);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        z-index:99999;
+        padding:20px;
+    `;
+
+    modal.innerHTML = `
+        <div style="
+            background:white;
+            width:100%;
+            max-width:420px;
+            border-radius:20px;
+            padding:25px;
+            box-sizing:border-box;
+        ">
+
+            <h2 style="
+                margin:0 0 8px;
+                color:#168a4a;
+                font-size:24px;
+            ">
+                Place Your Order
+            </h2>
+
+            <p style="
+                margin:0 0 20px;
+                color:#666;
+            ">
+                ${escapeHTML(name)}
+            </p>
+
+            <label style="display:block;margin-bottom:6px;font-weight:600;">
+                Customer Name
+            </label>
+
+            <input
+                id="customerNameInput"
+                type="text"
+                placeholder="Enter your name"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:14px;
+                    border:1px solid #ccc;
+                    border-radius:10px;
+                    margin-bottom:15px;
+                    font-size:16px;
+                "
+            >
+
+            <label style="display:block;margin-bottom:6px;font-weight:600;">
+                WhatsApp Number
+            </label>
+
+            <input
+                id="customerPhoneInput"
+                type="tel"
+                inputmode="numeric"
+                maxlength="10"
+                placeholder="10 digit WhatsApp number"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:14px;
+                    border:1px solid #ccc;
+                    border-radius:10px;
+                    margin-bottom:15px;
+                    font-size:16px;
+                "
+            >
+
+            <label style="display:block;margin-bottom:6px;font-weight:600;">
+                Quantity
+            </label>
+
+            <input
+                id="customerQuantityInput"
+                type="number"
+                min="1"
+                value="1"
+                style="
+                    width:100%;
+                    box-sizing:border-box;
+                    padding:14px;
+                    border:1px solid #ccc;
+                    border-radius:10px;
+                    margin-bottom:15px;
+                    font-size:16px;
+                "
+            >
+
+            <div
+                id="customerOrderError"
+                style="
+                    display:none;
+                    color:#d32f2f;
+                    margin-bottom:12px;
+                    font-size:14px;
+                "
+            ></div>
+
+            <button
+                id="submitCustomerOrder"
+                type="button"
+                style="
+                    width:100%;
+                    border:0;
+                    padding:15px;
+                    border-radius:12px;
+                    background:#25D366;
+                    color:white;
+                    font-size:17px;
+                    font-weight:bold;
+                    cursor:pointer;
+                "
+            >
+                💬 Submit Order
+            </button>
+
+            <button
+                id="cancelCustomerOrder"
+                type="button"
+                style="
+                    width:100%;
+                    margin-top:10px;
+                    border:0;
+                    padding:13px;
+                    border-radius:12px;
+                    background:#eee;
+                    color:#333;
+                    font-size:16px;
+                    cursor:pointer;
+                "
+            >
+                Cancel
+            </button>
+
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // CANCEL
+    document
+        .getElementById("cancelCustomerOrder")
+        .addEventListener("click", () => {
+            modal.remove();
+        });
+
+    // SUBMIT ORDER
+    document
+        .getElementById("submitCustomerOrder")
+        .addEventListener("click", async () => {
+
+            const customerName =
+                document
+                    .getElementById("customerNameInput")
+                    .value
+                    .trim();
+
+            const customerPhone =
+                document
+                    .getElementById("customerPhoneInput")
+                    .value
+                    .replace(/\D/g, "");
+
+            const orderQuantity =
+                document
+                    .getElementById("customerQuantityInput")
+                    .value;
+
+            const errorBox =
+                document.getElementById("customerOrderError");
+
+            // VALIDATION
+            if (!customerName) {
+                errorBox.textContent =
+                    "Please enter your name.";
+                errorBox.style.display = "block";
+                return;
+            }
+
+            if (!/^[6-9]\d{9}$/.test(customerPhone)) {
+                errorBox.textContent =
+                    "Please enter a valid 10 digit WhatsApp number.";
+                errorBox.style.display = "block";
+                return;
+            }
+
+            if (!orderQuantity || Number(orderQuantity) < 1) {
+                errorBox.textContent =
+                    "Please enter a valid quantity.";
+                errorBox.style.display = "block";
+                return;
+            }
+
+            const submitButton =
+                document.getElementById("submitCustomerOrder");
+
+            submitButton.disabled = true;
+            submitButton.textContent =
+                "Saving Order...";
+
+            // PRODUCT DATA
             const orderProduct = {
-
-                id:
-                    product.id || "",
-
-                name:
-                    name,
-
-                price:
-                    price,
-
-                offerPrice:
-                    offerPrice,
-
-                finalPrice:
-                    finalPrice
-
+                id: product.id || "",
+                name: name,
+                price: price,
+                offerPrice: offerPrice,
+                finalPrice: finalPrice
             };
 
+            // SAVE TO FIREBASE
+            const orderId = await saveWhatsAppOrder(
+                orderProduct,
+                customerName,
+                customerPhone,
+                orderQuantity
+            );
 
-            // Open WhatsApp immediately
+            if (!orderId) {
+
+                submitButton.disabled = false;
+                submitButton.textContent =
+                    "💬 Submit Order";
+
+                errorBox.textContent =
+                    "Order save nahi hua. Please try again.";
+
+                errorBox.style.display = "block";
+
+                return;
+            }
+
+            // CLOSE FORM
+            modal.remove();
+
+            // WHATSAPP MESSAGE
+            const totalPrice =
+                Number(finalPrice || price || 0) *
+                Number(orderQuantity);
+
+            const message =
+`Hello Kayra Enterprise,
+
+I want to order:
+
+Product: ${name}
+Quantity: ${orderQuantity}
+Price: ₹${finalPrice || price}
+Total: ₹${totalPrice}
+
+Customer Name: ${customerName}
+WhatsApp Number: ${customerPhone}
+
+Order ID: ${orderId}`;
+
+            const whatsappLink =
+                `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+            // OPEN WHATSAPP
             window.open(
                 whatsappLink,
                 "_blank"
             );
 
+        });
 
-            // Save order in Firebase
-            await saveWhatsAppOrder(
-                orderProduct
-            );
-
-        }
-    );
+}); 
 
 }
     
