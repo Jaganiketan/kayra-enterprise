@@ -820,14 +820,12 @@ function createProductCard(product) {
                 ?
 
                 `
-                <a
-                    href="${whatsappLink}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="order-btn"
-                >
-                    💬 Order on WhatsApp
-                </a>
+                <button
+    type="button"
+    class="order-btn"
+>
+    💬 Order on WhatsApp
+</button>
                 `
 
                 :
