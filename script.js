@@ -1128,7 +1128,7 @@ Order ID: ${orderId}`;
 
             const whatsappLink =
                 `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-
+             window.location.href = whatsappLink;
             
 
         });
