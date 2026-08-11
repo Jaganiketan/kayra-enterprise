@@ -77,7 +77,28 @@ const esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&
 const date=o=>o?.createdAt?.toDate?o.createdAt.toDate():new Date(o?.createdAt||0);
 function show(el,t,c){el.textContent=t;el.className="msg "+c}
 
-$("loginBtn").onclick=async()=>{try{await signInWithEmailAndPassword(auth,$("email").value.trim(),$("pass").value)}catch(e){show($("loginMsg"),"❌ Login failed","err")}};
+$("loginBtn").onclick=async()=>{
+  try{
+    const email=$("email").value.trim();
+    const password=$("pass").value;
+
+    if(!email || !password){
+      show($("loginMsg"),"❌ Email और Password दोनों भरें","err");
+      return;
+    }
+
+    await signInWithEmailAndPassword(auth,email,password);
+
+  }catch(e){
+    console.error("LOGIN ERROR:",e);
+
+    show(
+      $("loginMsg"),
+      "❌ "+(e.code || "Login failed")+" — "+(e.message || ""),
+      "err"
+    );
+  }
+};
 $("logout").onclick=()=>signOut(auth);
 onAuthStateChanged(auth,async u=>{if(!u){$("login").style.display="block";$("panel").style.display="none";return}if(u.uid!==UID){show($("loginMsg"),"❌ Admin account नहीं है","err");return}$("login").style.display="none";$("panel").style.display="block";$("user").textContent=u.email;await Promise.all([loadP(),loadO()]);});
 
