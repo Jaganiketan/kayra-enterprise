@@ -1129,11 +1129,7 @@ Order ID: ${orderId}`;
             const whatsappLink =
                 `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-            // OPEN WHATSAPP
-            window.open(
-                whatsappLink,
-                "_blank"
-            );
+            
 
         });
 
