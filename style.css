@@ -1173,10 +1173,9 @@ input {
 
 .modal-old-price {
     font-size: 15px;
-
     color: #888;
-
     text-decoration: line-through;
+    font-weight: 500;
 }
 
 
