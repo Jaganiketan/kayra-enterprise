@@ -1455,4 +1455,9 @@ input {
   }
 
                              }
-
+.old-price {
+    text-decoration: line-through !important;
+    color: #888 !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+}
