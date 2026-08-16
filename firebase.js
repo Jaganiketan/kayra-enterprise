@@ -1,12 +1,21 @@
 // Firebase SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
 import {
   getFirestore
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+import {
+  getAuth
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import {
+  getStorage
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+
 // Firebase Config
 const firebaseConfig = {
-  apiKey: "AIzaSyBe1Gi-atOr6ugqIIHNs5W_8x6DH0oCY9g",
+  apiKey: "YOUR_EXISTING_API_KEY",
   authDomain: "kayraenterprise-8a2ec.firebaseapp.com",
   projectId: "kayraenterprise-8a2ec",
   storageBucket: "kayraenterprise-8a2ec.firebasestorage.app",
@@ -17,7 +26,15 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Firestore Database
+// Services
 const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app);
 
-console.log("✅ Firebase Connected");
+// Export for other V3 files
+export { app, db, auth, storage };
+
+console.log("✅ Firebase App Connected");
+console.log("✅ Firestore Connected");
+console.log("✅ Firebase Auth Connected");
+console.log("✅ Firebase Storage Connected");
