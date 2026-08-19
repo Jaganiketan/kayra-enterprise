@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kayra Enterprise — Admin V3</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f5f4;color:#222;font-family:Arial,sans-serif}.head{background:#064d35;color:#fff;padding:18px;text-align:center;position:sticky;top:0;z-index:5}.wrap{max-width:1000px;margin:auto;padding:12px}.card{background:#fff;border-radius:15px;padding:16px;margin:12px 0;box-shadow:0 3px 14px #0001}h2{color:#064d35;margin:0 0 12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}@media(max-width:650px){.grid,.grid3{grid-template-columns:1fr}}input,select,textarea{width:100%;padding:11px;border:1px solid #ccc;border-radius:9px;margin-top:5px}label{font-size:13px;font-weight:bold;display:block;margin-top:9px}.btn{border:0;border-radius:9px;padding:11px 13px;font-weight:bold;cursor:pointer}.green{background:#08a65c;color:#fff}.red{background:#d93025;color:#fff}.gray{background:#555;color:#fff}.blue{background:#1769aa;color:#fff}.full{width:100%;margin-top:10px}.stat{text-align:center;background:#f1faf6;padding:12px;border-radius:10px}.num{font-size:22px;font-weight:bold;color:#087f5b}.small{font-size:12px;color:#666}.msg{display:none;padding:9px;margin-top:8px;border-radius:8px;text-align:center}.ok{display:block;background:#d9f8e8;color:#08733f}.err{display:block;background:#ffe1e1;color:#a40000}.item{border:1px solid #ddd;border-radius:12px;padding:11px;margin-top:9px}.item img{width:100%;height:180px;object-fit:contain;background:#f5f5f5;border-radius:9px}.row{display:flex;gap:7px}.row>*{flex:1}.actions{display:flex;gap:6px;margin-top:8px}.actions>*{flex:1}.thumbs{display:flex;gap:6px;overflow:auto;margin-top:7px}.thumb{width:64px;height:64px;object-fit:cover;border-radius:8px;border:2px solid #ddd}.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#eef6f2;margin:3px;font-size:12px}.hidden{display:none}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:12px;z-index:20}.modalbox{background:#fff;border-radius:15px;max-width:700px;width:100%;max-height:92vh;overflow:auto;padding:16px}.check{display:flex;align-items:center;gap:8px}.check input{width:auto}.danger{background:#fff1f1;border:1px solid #f3b3b3;padding:10px;border-radius:9px}
+</style>
+</head>
+<body>
+<div class="head"><h2 style="color:#fff;margin:0">Kayra Enterprise</h2><div>Secure Admin Dashboard V3</div></div>
+<div class="wrap">
+
+<section id="login" class="card">
+<h2>🔐 Admin Login</h2>
+<label>Email<input id="email" type="email" autocomplete="username"></label>
+<label>Password<input id="pass" type="password" autocomplete="current-password"></label>
+<button id="loginBtn" class="btn green full">Login</button>
+<div id="loginMsg" class="msg"></div>
+</section>
+
+<main id="panel" class="hidden">
+<div class="card">
+<div class="small">Logged in as <b id="user"></b></div>
+<button id="logout" class="btn red full">Logout</button>
+</div>
+
+<div class="card"><h2>📊 Dashboard</h2><div class="grid3">
+<div class="stat"><div id="tp" class="num">0</div><div class="small">Products</div></div>
+<div class="stat"><div id="tc" class="num">0</div><div class="small">Categories</div></div>
+<div class="stat"><div id="to" class="num">0</div><div class="small">Orders</div></div>
+<div class="stat"><div id="po" class="num">0</div><div class="small">Pending</div></div>
+<div class="stat"><div id="sales" class="num">₹0</div><div class="small">Sales</div></div>
+<div class="stat"><div id="mc" class="num">0</div><div class="small">Marketing Opt-ins</div></div>
+</div></div>
+
+<div class="card"><h2>📂 Category Management</h2>
+<div class="grid">
+<div><label>Category name<input id="catName" maxlength="60"></label></div>
+<div><label>Parent (optional)<select id="catParent"><option value="">Main category</option></select></label></div>
+</div>
+<div class="row"><button id="addCat" class="btn green">➕ Add Category</button><button id="refreshCat" class="btn gray">↻ Refresh</button></div>
+<div id="catList"></div>
+</div>
+
+<div class="card"><h2>➕ Add / Manage Product</h2>
+<label>Name *<input id="name" maxlength="160"></label>
+<div class="grid">
+<div><label>Category<select id="cat"></select></label></div>
+<div><label>SKU<input id="sku" maxlength="60"></label></div>
+</div>
+<label>Description<textarea id="desc" maxlength="4000"></textarea></label>
+<div class="grid">
+<div><label>Regular/MRP Price *<input id="price" type="number" min="0" step="0.01"></label></div>
+<div><label>Offer Price<input id="offer" type="number" min="0" step="0.01"></label></div>
+</div>
+<div class="grid">
+<div><label>Stock Quantity<input id="qty" type="number" min="0" max="100000" value="1"></label></div>
+<div><label>Color / Variant<input id="variant" maxlength="120"></label></div>
+</div>
+<div class="check"><input id="stock" type="checkbox" checked><label for="stock">🟢 In Stock</label></div>
+<div class="check"><input id="featured" type="checkbox"><label for="featured">⭐ Featured</label></div>
+<div class="check"><input id="newp" type="checkbox"><label for="newp">🆕 New</label></div>
+<label>📷 Product Photos (multiple)<input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
+<div id="preview" class="thumbs"></div>
+<button id="add" class="btn green full">➕ Add Product</button><div id="mainMsg" class="msg"></div>
+</div>
+
+<div class="card"><h2>🛍️ Products</h2>
+<input id="psearch" placeholder="Search products...">
+<div id="plist">Loading...</div>
+</div>
+
+<div class="card"><h2>📦 Order History</h2>
+<input id="osearch" placeholder="Search customer/product/phone...">
+<div class="row"><select id="filter"><option value="all">All</option><option>pending</option><option>completed</option><option>cancelled</option></select><select id="period"><option value="all">All Time</option><option value="today">Today</option><option value="month">This Month</option></select></div>
+<div id="olist">Loading...</div>
+</div>
+
+<div class="card"><h2>📢 Customer Marketing / Opt-ins</h2>
+<div class="small">Only customers who explicitly opted in for promotional updates are shown here.</div>
+<div class="row"><input id="msearch" placeholder="Search name/phone"><button id="refreshM" class="btn gray">↻</button></div>
+<div id="mlist">Loading...</div>
+</div>
+
+<div class="card"><h2>📈 Reports</h2>
+<div class="grid3">
+<div class="stat"><div id="ro" class="num">0</div><div class="small">Orders</div></div>
+<div class="stat"><div id="rc" class="num">0</div><div class="small">Completed</div></div>
+<div class="stat"><div id="rs" class="num">₹0</div><div class="small">Sales</div></div>
+</div>
+<div id="best"></div>
+</div>
+
+<div class="card"><h2>🤖 Gemini AI</h2>
+<div class="small">Gemini must be called through a secure backend endpoint. Never put a Gemini secret key in this HTML.</div>
+<label>AI request<textarea id="aiPrompt" placeholder="Example: Write a professional description for this product..."></textarea></label>
+<button id="aiBtn" class="btn blue full">✨ Generate with secure AI endpoint</button>
+<pre id="aiOut" style="white-space:pre-wrap;background:#f6f6f6;padding:10px;border-radius:9px"></pre>
+</div>
+
+<div class="card danger"><h2>🛡️ Security Status</h2>
+<div class="small">Frontend checks are not the security boundary. Firestore rules must enforce admin-only writes. Cloudinary upload restrictions and Firebase App Check should be enabled for production. Secrets must remain server-side.</div>
+</div>
+</main>
+</div>
+
+<div id="editModal" class="modal"><div class="modalbox">
+<h2>✏️ Edit Product</h2><input type="hidden" id="editId">
+<label>Name<input id="en"></label>
+<label>Category<select id="ecat"></select></label>
+<label>SKU<input id="esku"></label>
+<label>Description<textarea id="edesc"></textarea></label>
+<div class="grid"><div><label>Regular price<input id="eprice" type="number" min="0"></label></div><div><label>Offer price<input id="eoffer" type="number" min="0"></label></div></div>
+<label>Stock quantity<input id="eqty" type="number" min="0"></label>
+<div class="check"><input id="estock" type="checkbox"><label for="estock">In Stock</label></div>
+<div class="check"><input id="efeat" type="checkbox"><label for="efeat">Featured</label></div>
+<div class="check"><input id="enew" type="checkbox"><label for="enew">New</label></div>
+<label>Current photos</label><div id="ephotos" class="thumbs"></div>
+<label>➕ Add new photos<input id="eaddphotos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label>
+<div class="small">Existing photos are kept unless you remove them. You can remove individual existing photos and add new ones.</div>
+<div class="actions"><button id="saveEdit" class="btn green">💾 Save Changes</button><button id="closeEdit" class="btn gray">Close</button></div>
+<div id="editMsg" class="msg"></div>
+</div></div>
+
+<script type="module">
+import { db, auth } from "./firebase.js";
+import { collection,getDocs,addDoc,doc,updateDoc,deleteDoc,serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { signInWithEmailAndPassword,onAuthStateChanged,signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+const ADMIN_UID="nXHIW6ntWCZilxyxoupg9kgATsy2";
+const CLOUD="dzasxahe9", PRESET="shopupload";
+let products=[], orders=[], categories=[], customers=[];
+const $=id=>document.getElementById(id);
+const money=x=>"₹"+Number(x||0).toLocaleString("en-IN");
+const esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const date=o=>o?.createdAt?.toDate?o.createdAt.toDate():new Date(o?.createdAt||0);
+const msg=(el,t,c)=>{el.textContent=t;el.className="msg "+c};
+
+$("loginBtn").onclick=async()=>{
+  const email=$("email").value.trim(), pass=$("pass").value;
+  if(!email||!pass)return msg($("loginMsg"),"Email और password भरें","err");
+  try{await signInWithEmailAndPassword(auth,email,pass)}catch(e){console.warn(e.code);msg($("loginMsg"),"❌ Incorrect email or password.","err")}
+};
+$("logout").onclick=()=>signOut(auth);
+
+onAuthStateChanged(auth,async u=>{
+  if(!u){$("login").classList.remove("hidden");$("panel").classList.add("hidden");return}
+  if(u.uid!==ADMIN_UID){await signOut(auth);msg($("loginMsg"),"❌ Admin access denied.","err");return}
+  $("login").classList.add("hidden");$("panel").classList.remove("hidden");$("user").textContent=u.email||"Admin";
+  await Promise.all([loadProducts(),loadOrders(),loadCategories(),loadCustomers()]);
+});
+
+async function cloudUpload(file){
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw Error("Only JPG, PNG and WebP allowed");
+  if(file.size>5*1024*1024)throw Error("Image must be 5MB or smaller");
+  const fd=new FormData();fd.append("file",file);fd.append("upload_preset",PRESET);
+  const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`,{method:"POST",body:fd});
+  if(!r.ok)throw Error("Image upload failed");
+  const j=await r.json();if(!j.secure_url)throw Error("Cloudinary returned no URL");return j.secure_url;
+}
+
+async function loadProducts(){const s=await getDocs(collection(db,"products"));products=s.docs.map(d=>({id:d.id,...d.data()}));$("tp").textContent=products.length;renderProducts()}
+async function loadOrders(){const s=await getDocs(collection(db,"orders"));orders=s.docs.map(d=>({id:d.id,...d.data()}));$("to").textContent=orders.length;renderOrders();report()}
+async function loadCategories(){const s=await getDocs(collection(db,"categories"));categories=s.docs.map(d=>({id:d.id,...d.data()}));renderCategories();fillCategorySelects();$("tc").textContent=categories.length}
+async function loadCustomers(){const s=await getDocs(collection(db,"customers"));customers=s.docs.map(d=>({id:d.id,...d.data()}));$("mc").textContent=customers.filter(x=>x.marketingConsent===true).length;renderMarketing()}
+
+function fillCategorySelects(){
+  const mains=categories.filter(c=>!c.parentId);
+  $("catParent").innerHTML='<option value="">Main category</option>'+mains.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join("");
+  const opts=categories.map(c=>`<option value="${esc(c.id)}">${esc(c.parentId?"↳ ":"")}${esc(c.name)}</option>`).join("");
+  $("cat").innerHTML=opts||'<option value="">Create a category first</option>';
+  $("ecat").innerHTML=opts;
+}
+$("addCat").onclick=async()=>{
+  const name=$("catName").value.trim(), parentId=$("catParent").value;
+  if(!name)return alert("Category name required");
+  if(categories.some(c=>c.name.toLowerCase()===name.toLowerCase()&&String(c.parentId||"")===String(parentId||"")))return alert("Category already exists");
+  await addDoc(collection(db,"categories"),{name,parentId:parentId||"",active:true,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  $("catName").value="";await loadCategories();
+};
+$("refreshCat").onclick=loadCategories;
+
+function renderCategories(){
+  $("catList").innerHTML=categories.length?categories.map(c=>{
+    const count=products.filter(p=>p.categoryId===c.id||p.category===c.id||p.category===c.name).length;
+    return `<div class="item"><b>${esc(c.name)}</b> <span class="pill">${count} products</span><span class="pill">${c.active===false?"Hidden":"Active"}</span><div class="actions"><button class="btn gray" data-ca="${c.id}">${c.active===false?"Show":"Hide"} customer</button><button class="btn red" data-cd="${c.id}">Delete</button></div></div>`
+  }).join(""):"<div class='small'>No categories yet.</div>";
+  document.querySelectorAll("[data-ca]").forEach(b=>b.onclick=async()=>{let c=categories.find(x=>x.id===b.dataset.ca);await updateDoc(doc(db,"categories",c.id),{active:c.active===false,updatedAt:serverTimestamp()});await loadCategories()});
+  document.querySelectorAll("[data-cd]").forEach(b=>b.onclick=async()=>{if(confirm("Delete category?")){await deleteDoc(doc(db,"categories",b.dataset.cd));await loadCategories()}});
+}
+
+$("photos").onchange=()=>previewFiles($("photos").files,$("preview"));
+function previewFiles(files,el){el.innerHTML="";[...files].slice(0,10).forEach(f=>{const u=URL.createObjectURL(f);el.insertAdjacentHTML("beforeend",`<img class="thumb" src="${u}">`)})}
+
+$("add").onclick=async()=>{
+  const name=$("name").value.trim(), price=Number($("price").value);
+  if(!name||!Number.isFinite(price)||price<0)return msg($("mainMsg"),"Name और valid price जरूरी है","err");
+  $("add").disabled=true;
+  try{
+    const imgs=[];for(const f of $("photos").files)imgs.push(await cloudUpload(f));
+    const c=categories.find(x=>x.id===$("cat").value);
+    await addDoc(collection(db,"products"),{
+      name,categoryId:c?.id||"",category:c?.name||"",sku:$("sku").value.trim(),
+      description:$("desc").value.trim(),price,offerPrice:Number($("offer").value||0),
+      stockQty:Number($("qty").value||0),stock:$("stock").checked,featured:$("featured").checked,
+      isNew:$("newp").checked,variant:$("variant").value.trim(),image:imgs[0]||"",images:imgs,
+      createdAt:serverTimestamp(),updatedAt:serverTimestamp()
+    });
+    msg($("mainMsg"),"✅ Product added","ok");
+    ["name","sku","desc","price","offer","variant"].forEach(id=>$(id).value="");$("photos").value="";$("preview").innerHTML="";
+    await loadProducts();
+  }catch(e){msg($("mainMsg"),"❌ "+e.message,"err")}finally{$("add").disabled=false}
+};
+
+function renderProducts(){
+  const q=$("psearch").value.toLowerCase();
+  const arr=products.filter(p=>String(p.name||"").toLowerCase().includes(q));
+  $("plist").innerHTML=arr.length?arr.map(p=>{
+    const imgs=p.images?.filter(Boolean)||(p.image?[p.image]:[]),pr=Number(p.price||0),of=Number(p.offerPrice||0);
+    return `<div class="item">${imgs[0]?`<img src="${esc(imgs[0])}" alt="">`:""}<b>${esc(p.name)}</b><div class="small">${esc(p.category||"")} · ${esc(p.sku||"")}</div><div><b>${money(of>0&&of<pr?of:pr)}</b> ${of>0&&of<pr?`<s>${money(pr)}</s>`:""}</div><div class="thumbs">${imgs.slice(0,6).map(u=>`<img class="thumb" src="${esc(u)}">`).join("")}</div><div class="actions"><button class="btn green" data-edit="${p.id}">✏️ Edit</button><button class="btn red" data-del="${p.id}">🗑️ Delete</button></div></div>`
+  }).join(""):"<div class='small'>No products.</div>";
+  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEdit(b.dataset.edit));
+  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{if(confirm("Delete product?")){await deleteDoc(doc(db,"products",b.dataset.del));await loadProducts()}});
+}
+$("psearch").oninput=renderProducts;
+
+let editImages=[];
+function openEdit(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  $("editId").value=id;$("en").value=p.name||"";$("ecat").value=p.categoryId||p.category||"";$("esku").value=p.sku||"";$("edesc").value=p.description||"";
+  $("eprice").value=p.price||0;$("eoffer").value=p.offerPrice||0;$("eqty").value=p.stockQty||0;
+  $("estock").checked=p.stock!==false;$("efeat").checked=!!p.featured;$("enew").checked=!!p.isNew;
+  editImages=(p.images?.filter(Boolean)||(p.image?[p.image]:[])).map(url=>({url,remove:false}));
+  renderEditImages();$("editModal").style.display="flex";
+}
+function renderEditImages(){
+  $("ephotos").innerHTML=editImages.length?editImages.map((x,i)=>`<div style="position:relative"><img class="thumb" src="${esc(x.url)}" style="${x.remove?"opacity:.35":""}"><button type="button" class="btn red" data-rem="${i}" style="padding:4px 7px">✕</button></div>`).join(""):"<div class='small'>No photos</div>";
+  document.querySelectorAll("[data-rem]").forEach(b=>b.onclick=()=>{editImages.splice(Number(b.dataset.rem),1);renderEditImages()});
+}
+$("eaddphotos").onchange=async()=>{
+  try{for(const f of $("eaddphotos").files){const url=await cloudUpload(f);editImages.push({url});}renderEditImages()}catch(e){msg($("editMsg"),"❌ "+e.message,"err")}
+};
+$("closeEdit").onclick=()=>{$("editModal").style.display="none"};
+$("saveEdit").onclick=async()=>{
+  const id=$("editId").value,p=products.find(x=>x.id===id);if(!p)return;
+  const c=categories.find(x=>x.id===$("ecat").value);
+  try{
+    const imgs=editImages.map(x=>x.url).filter(Boolean);
+    await updateDoc(doc(db,"products",id),{
+      name:$("en").value.trim(),categoryId:c?.id||"",category:c?.name||"",sku:$("esku").value.trim(),
+      description:$("edesc").value.trim(),price:Number($("eprice").value||0),offerPrice:Number($("eoffer").value||0),
+      stockQty:Number($("eqty").value||0),stock:$("estock").checked,featured:$("efeat").checked,isNew:$("enew").checked,
+      image:imgs[0]||"",images:imgs,updatedAt:serverTimestamp()
+    });
+    msg($("editMsg"),"✅ Product updated","ok");await loadProducts();setTimeout(()=>$("editModal").style.display="none",400);
+  }catch(e){msg($("editMsg"),"❌ "+e.message,"err")}
+};
+
+function renderOrders(){
+  const q=$("osearch").value.toLowerCase(),st=$("filter").value,per=$("period").value,now=new Date();
+  const arr=orders.filter(o=>{const text=JSON.stringify(o).toLowerCase(),d=date(o);if(q&&!text.includes(q))return false;if(st!="all"&&String(o.status||"pending").toLowerCase()!=st)return false;if(per==="today"&&d.toDateString()!=now.toDateString())return false;if(per==="month"&&(d.getMonth()!=now.getMonth()||d.getFullYear()!=now.getFullYear()))return false;return true}).sort((a,b)=>date(b)-date(a));
+  $("olist").innerHTML=arr.length?arr.map(o=>{const st=String(o.status||"pending"),total=o.total||o.amount||o.price||0;return `<div class="item"><b>${esc(o.customerName||o.name||"Customer")}</b> <span class="pill">${esc(st)}</span><div>${esc(o.productName||o.product||"Product")} × ${o.quantity||1}</div><div class="small">${esc(o.phone||o.mobile||"")} · ${date(o).toLocaleString("en-IN")}</div><b>${money(total)}</b>${st==="pending"?`<div class="actions"><button class="btn green" data-com="${o.id}">Completed</button><button class="btn red" data-can="${o.id}">Cancelled</button></div>`:""}</div>`}).join(""):"<div class='small'>No orders.</div>";
+  document.querySelectorAll("[data-com]").forEach(b=>b.onclick=()=>setOrder(b.dataset.com,"completed"));document.querySelectorAll("[data-can]").forEach(b=>b.onclick=()=>setOrder(b.dataset.can,"cancelled"));
+}
+async function setOrder(id,status){await updateDoc(doc(db,"orders",id),{status,updatedAt:serverTimestamp()});await loadOrders()}
+$("osearch").oninput=renderOrders;$("filter").onchange=renderOrders;$("period").onchange=renderOrders;
+
+function report(){
+  const completed=orders.filter(o=>o.status==="completed"),sales=completed.reduce((s,o)=>s+Number(o.total||o.amount||o.price||0),0);
+  $("po").textContent=orders.filter(o=>String(o.status||"pending")==="pending").length;$("sales").textContent=money(sales);
+  $("ro").textContent=orders.length;$("rc").textContent=completed.length;$("rs").textContent=money(sales);
+  const m={};completed.forEach(o=>{const n=o.productName||o.product||"Product";m[n]=(m[n]||0)+Number(o.quantity||1)});
+  $("best").innerHTML=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,10).map((x,i)=>`<div class="item">${i+1}. <b>${esc(x[0])}</b> — ${x[1]} sold</div>`).join("");
+}
+
+function renderMarketing(){
+  const q=$("msearch").value.toLowerCase();
+  const arr=customers.filter(c=>c.marketingConsent===true&&(!q||JSON.stringify(c).toLowerCase().includes(q)));
+  $("mlist").innerHTML=arr.length?arr.map(c=>`<div class="item"><b>${esc(c.name||"Customer")}</b><div>${esc(c.phone||c.whatsapp||"")}</div><div class="small">Consent: ${date(c.consentAt).toLocaleString("en-IN")}</div><button class="btn red full" data-opt="${c.id}">Remove marketing consent</button></div>`).join(""):"<div class='small'>No opted-in customers.</div>";
+  document.querySelectorAll("[data-opt]").forEach(b=>b.onclick=async()=>{await updateDoc(doc(db,"customers",b.dataset.opt),{marketingConsent:false,updatedAt:serverTimestamp()});await loadCustomers()});
+}
+$("msearch").oninput=renderMarketing;$("refreshM").onclick=loadCustomers;
+
+$("aiBtn").onclick=async()=>{
+  const prompt=$("aiPrompt").value.trim();if(!prompt)return;
+  $("aiBtn").disabled=true;$("aiOut").textContent="Generating...";
+  try{
+    const r=await fetch("/api/gemini",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
+    if(!r.ok)throw Error("Secure AI endpoint is not configured yet.");
+    const j=await r.json();$("aiOut").textContent=j.text||"No response";
+  }catch(e){$("aiOut").textContent="⚠️ "+e.message+"\n\nGemini is intentionally not called directly from this browser because an API secret must remain server-side."}
+  finally{$("aiBtn").disabled=false}
+};
+</script>
+</body>
+</html>

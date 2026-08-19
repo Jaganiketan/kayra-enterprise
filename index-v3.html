@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kayra Enterprise V3</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f6f7f6;color:#222}.head{background:#064d35;color:#fff;padding:18px;text-align:center}.wrap{max-width:1100px;margin:auto;padding:12px}.tools{background:#fff;padding:12px;border-radius:14px;margin:12px 0}.tools input{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px}.cats{display:flex;gap:7px;overflow:auto;padding:7px 0}.cat{white-space:nowrap;border:0;border-radius:20px;padding:9px 13px;background:#e9f4ef}.cat.active{background:#064d35;color:#fff}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}@media(min-width:750px){.grid{grid-template-columns:repeat(4,1fr)}}.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 10px #0001}.card img{width:100%;height:220px;object-fit:contain;background:#f5f5f5}.body{padding:10px}.price{font-weight:bold;color:#087f5b;font-size:18px}.old{text-decoration:line-through;color:#888;font-size:13px}.btn{border:0;border-radius:9px;padding:10px;font-weight:bold}.wa{background:#08a65c;color:#fff;width:100%;margin-top:8px}.wish{background:#eee;width:100%;margin-top:6px}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:12px;z-index:10}.box{background:#fff;border-radius:15px;max-width:600px;width:100%;max-height:92vh;overflow:auto;padding:16px}.box img{width:100%;max-height:350px;object-fit:contain}.thumbs{display:flex;gap:5px;overflow:auto}.thumb{width:60px;height:60px;object-fit:cover;border-radius:7px}.popup{position:fixed;left:12px;right:12px;bottom:12px;background:#fff;border-radius:16px;padding:18px;box-shadow:0 5px 30px #0005;z-index:30;display:none}.popup input{width:100%;padding:11px;margin:5px 0;border:1px solid #ccc;border-radius:8px}.check{display:flex;gap:8px;align-items:center;font-size:12px}.check input{width:auto}.muted{font-size:12px;color:#666}
+</style>
+</head>
+<body>
+<div class="head"><h2 style="margin:0">Kayra Enterprise</h2><div>New Collection & Offers</div></div>
+<div class="wrap">
+<div class="tools"><input id="search" placeholder="🔎 Search products..."><div id="cats" class="cats"></div></div>
+<div id="products" class="grid"></div>
+</div>
+
+<div id="productModal" class="modal"><div class="box">
+<button id="close" class="btn">✕ Close</button><div id="detail"></div>
+</div></div>
+
+<div id="subscribe" class="popup">
+<h2 style="margin-top:0;color:#064d35">🎁 नई Collection सबसे पहले पाएं!</h2>
+<p>New products और special offers की जानकारी WhatsApp पर पाने के लिए जुड़ें।</p>
+<input id="cname" placeholder="आपका नाम" maxlength="80">
+<input id="cphone" placeholder="WhatsApp Number" inputmode="tel" maxlength="20">
+<label class="check"><input id="consent" type="checkbox"> मैं Kayra Enterprise से नए products और offers की WhatsApp updates प्राप्त करने के लिए सहमत हूँ।</label>
+<button id="join" class="btn wa">मुझे जोड़ें</button>
+<button id="skip" class="btn" style="width:100%;margin-top:5px">अभी नहीं</button>
+<div id="submsg" class="muted"></div>
+</div>
+
+<script type="module">
+import { db } from "./firebase.js";
+import { collection,getDocs,addDoc,serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+const $=id=>document.getElementById(id), esc=x=>String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+let products=[],categories=[],selected="";
+const money=x=>"₹"+Number(x||0).toLocaleString("en-IN");
+async function init(){const [p,c]=await Promise.all([getDocs(collection(db,"products")),getDocs(collection(db,"categories"))]);products=p.docs.map(d=>({id:d.id,...d.data()}));categories=c.docs.map(d=>({id:d.id,...d.data()}));renderCats();render()}
+function renderCats(){const active=categories.filter(c=>c.active!==false&&products.some(p=>p.categoryId===c.id||p.category===c.name));$("cats").innerHTML=`<button class="cat ${!selected?"active":""}" data-cat="">All</button>`+active.map(c=>`<button class="cat ${selected===c.id?"active":""}" data-cat="${esc(c.id)}">${esc(c.name)}</button>`).join("");document.querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{selected=b.dataset.cat;renderCats();render()})}
+function render(){const q=$("search").value.toLowerCase();const arr=products.filter(p=>p.stock!==false&&(!selected||p.categoryId===selected)&&(!q||JSON.stringify(p).toLowerCase().includes(q)));$("products").innerHTML=arr.map(p=>{const im=p.images?.[0]||p.image||"",pr=Number(p.price||0),of=Number(p.offerPrice||0),final=of>0&&of<pr?of:pr;return `<div class="card"><img src="${esc(im)}" alt=""><div class="body"><b>${esc(p.name)}</b><div class="muted">${esc(p.category||"")}</div><div class="price">${money(final)} ${of>0&&of<pr?`<span class="old">${money(pr)}</span>`:""}</div><button class="btn wa" data-view="${p.id}">View & Order</button></div></div>`}).join("")||"<p>No products found.</p>";document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>openProduct(b.dataset.view))}
+$("search").oninput=render;
+function openProduct(id){const p=products.find(x=>x.id===id),ims=p.images?.filter(Boolean)||(p.image?[p.image]:[]),pr=Number(p.price||0),of=Number(p.offerPrice||0),final=of>0&&of<pr?of:pr;const msg=encodeURIComponent(`Hello Kayra Enterprise, I want to order:\nProduct: ${p.name}\nPrice: ₹${final}\nSKU: ${p.sku||""}`);$("detail").innerHTML=`<img id="mainImg" src="${esc(ims[0]||"")}"><div class="thumbs">${ims.map(u=>`<img class="thumb" data-img="${esc(u)}" src="${esc(u)}">`).join("")}</div><h2>${esc(p.name)}</h2><div class="price">${money(final)} ${of>0&&of<pr?`<span class="old">${money(pr)}</span>`:""}</div><p>${esc(p.description||"")}</p><p class="muted">Stock: ${Number(p.stockQty||0)}</p><a class="btn wa" style="display:block;text-align:center;text-decoration:none" target="_blank" href="https://wa.me/?text=${msg}">💬 Order on WhatsApp</a>`;$("productModal").style.display="flex";document.querySelectorAll("[data-img]").forEach(x=>x.onclick=()=>{$("mainImg").src=x.dataset.img})}
+$("close").onclick=()=>{$("productModal").style.display="none"};
+function maybePopup(){if(localStorage.getItem("kayra_marketing_subscribed")==="1"||localStorage.getItem("kayra_marketing_dismissed")==="1")return;setTimeout(()=>$("subscribe").style.display="block",5000)}
+$("skip").onclick=()=>{localStorage.setItem("kayra_marketing_dismissed","1");$("subscribe").style.display="none"};
+$("join").onclick=async()=>{const name=$("cname").value.trim(),phone=$("cphone").value.replace(/\D/g,""),consent=$("consent").checked;if(!name||phone.length<8||!consent){$("submsg").textContent="नाम, valid WhatsApp number और consent जरूरी है.";return}try{await addDoc(collection(db,"customers"),{name,phone,whatsapp:phone,marketingConsent:true,consentAt:serverTimestamp(),source:"website_popup",createdAt:serverTimestamp()});localStorage.setItem("kayra_marketing_subscribed","1");$("subscribe").style.display="none";alert("✅ आप updates list में जुड़ गए हैं।")}catch(e){$("submsg").textContent="Registration failed. Please try again."}};
+init().then(maybePopup);
+</script>
+</body>
+</html>
