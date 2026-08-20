@@ -189,12 +189,52 @@ function fillCategorySelects(){
   $("cat").innerHTML=opts||'<option value="">Create a category first</option>';
   $("ecat").innerHTML=opts;
 }
-$("addCat").onclick=async()=>{
-  const name=$("catName").value.trim(), parentId=$("catParent").value;
-  if(!name)return alert("Category name required");
-  if(categories.some(c=>c.name.toLowerCase()===name.toLowerCase()&&String(c.parentId||"")===String(parentId||"")))return alert("Category already exists");
-  await addDoc(collection(db,"categories"),{name,parentId:parentId||"",active:true,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
-  $("catName").value="";await loadCategories();
+$("addCat").onclick = async () => {
+  const input = $("catName");
+  const parent = $("catParent");
+
+  if (!input) {
+    alert("ERROR: catName input नहीं मिला");
+    return;
+  }
+
+  const name = input.value.trim();
+  const parentId = parent ? parent.value : "";
+
+  if (!name) {
+    alert("Category name required");
+    input.focus();
+    return;
+  }
+
+  try {
+    const exists = categories.some(
+      c =>
+        String(c.name || "").toLowerCase() === name.toLowerCase() &&
+        String(c.parentId || "") === String(parentId || "")
+    );
+
+    if (exists) {
+      alert("Category already exists");
+      return;
+    }
+
+    await addDoc(collection(db, "categories"), {
+      name: name,
+      parentId: parentId || "",
+      active: true,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+
+    input.value = "";
+    await loadCategories();
+
+    alert("✅ Category added successfully");
+  } catch (e) {
+    console.error("CATEGORY ADD ERROR:", e);
+    alert("❌ Category add नहीं हुई: " + (e.message || e.code || "Unknown error"));
+  }
 };
 $("refreshCat").onclick=loadCategories;
 
