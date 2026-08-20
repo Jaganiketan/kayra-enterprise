@@ -139,10 +139,26 @@ const date=o=>o?.createdAt?.toDate?o.createdAt.toDate():new Date(o?.createdAt||0
 const msg=(el,t,c)=>{el.textContent=t;el.className="msg "+c};
 
 $("loginBtn").onclick=async()=>{
-  const email=$("email").value.trim(), pass=$("pass").value;
-  if(!email||!pass)return msg($("loginMsg"),"Email और password भरें","err");
-  try{await signInWithEmailAndPassword(auth,email,pass)}catch(e){console.warn(e.code);msg($("loginMsg"),"❌ Incorrect email or password.","err")}
+  const email=$("email").value.trim();
+  const pass=$("pass").value;
+
+  if(!email || !pass){
+    return msg($("loginMsg"),"Email और password भरें","err");
+  }
+
+  try{
+    await signInWithEmailAndPassword(auth,email,pass);
+  }catch(e){
+    console.error("FIREBASE LOGIN ERROR:", e);
+
+    msg(
+      $("loginMsg"),
+      "❌ " + (e.code || "unknown-error") + ": " + (e.message || "Login failed"),
+      "err"
+    );
+  }
 };
+
 $("logout").onclick=()=>signOut(auth);
 
 onAuthStateChanged(auth,async u=>{
