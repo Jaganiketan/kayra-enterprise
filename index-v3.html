@@ -1104,27 +1104,21 @@ $("submitOrder").onclick =
       },1500);
 
 
-    }catch(e){
+}catch(e){
 
-      console.error(
-        "ORDER SAVE ERROR:",
-        e
-      );
+  console.error("ORDER SAVE ERROR CODE:", e.code);
+  console.error("ORDER SAVE ERROR MESSAGE:", e.message);
+  console.error("FULL ERROR:", e);
 
+  $("orderMsg").className = "msg err";
 
-      $("orderMsg").className =
-        "msg err";
+  $("orderMsg").textContent =
+    "❌ " + (e.code || "ERROR") +
+    ": " +
+    (e.message || "Unknown error");
 
-      $("orderMsg").textContent =
-        "❌ Order save नहीं हुआ: " +
-        (e.message || "Unknown error");
-
-
-      button.disabled = false;
-
-      button.textContent =
-        "💬 Submit Order";
-
+  button.disabled = false;
+  button.textContent = "💬 Submit Order";
     }
 
   };
